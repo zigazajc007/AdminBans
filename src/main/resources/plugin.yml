@@ -1,0 +1,25 @@
+name: AdminBans
+version: ${project.version}
+main: com.rabbitcompany.adminbans.AdminBans
+api-version: 1.13
+load: STARTUP
+authors: [Black1_TV]
+description: Manage bans, warns, kicks and mutes.
+website: https://rabbit-company.com
+softdepend: [PlaceholderAPI]
+commands:
+  ban:
+    usage: /<command>
+    description: Ban player
+  unban:
+    usage: /<command>
+    description: Unban player
+  kick:
+    usage: /<command>
+    description: Kick player
+  mute:
+    usage: /<command>
+    description: Mute player
+  unmute:
+    usage: /<command>
+    description: Unmute player
