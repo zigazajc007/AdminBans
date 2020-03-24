@@ -1,0 +1,76 @@
+#       ----------- + AdminBans by Ziga Zajc + -----------   #
+#                                                            #
+#                            Messages                        #
+#                                                            #
+#       --------- + ------------------------- + ----------   #
+#
+#       You can use chat colors:
+#                ________________________
+#               |   code: | color:       |
+#               |________________________|
+#               |     &0  |	Black	     |
+#               |     &1  |	Dark Blue	 |
+#               |     &2  |	Dark Green	 |
+#               |     &3  |	Dark Aqua	 |
+#               |     &4  |	Dark Red	 |
+#               |     &5  |	Dark Purple	 |
+#               |     &6  |	Gold	     |
+#               |     &7  |	Gray	     |
+#               |     &8  |	Dark Gray	 |
+#               |     &9  |	Blue	     |
+#               |     &a  |	Green	     |
+#               |     &b  |	Aqua	     |
+#               |     &c  |	Red	         |
+#               |     &d  |	Light Purple |
+#               |     &e  |	Yellow	     |
+#               |     &f  |	White	     |
+#               |     &k  |	Obfuscated	 |
+#               |     &l  |	Bold	     |
+#               |     &m  |	Strikethrough|
+#               |     &n  |	Underline	 |
+#               |     &o  |	Italic	     |
+#               |     &r  |	Reset	     |
+#               |________________________|
+#
+#----------------------------------------------------------
+#                         AdminBans
+#----------------------------------------------------------
+prefix: "&7[&cAdminBans&7] "
+#----------------------------------------------------------
+#                       Messages
+#----------------------------------------------------------
+permission: "&cYou don't have permission to do this!"
+reload: "&aPlugin has been reloaded."
+commands: "&aAvailable commands: /adminbans help and /adminbans reload"
+is_not_a_player: "&c{player} isn't a player!"
+is_not_a_number: "&c{number} isn't a number!"
+is_not_online: "&cPlayer {player} isn't online."
+is_not_banned: "&a{player} isn't banned."
+is_not_muted: "&a{player} isn't muted."
+#----------------------------------------------------------
+#                       Syntax
+#----------------------------------------------------------
+ban_syntax: "&cPlease use /ban <player> <time> <reason>"
+unban_syntax: "&cPlease use /unban <player>"
+kick_syntax: "&cPlease use /kick <player> <reason>"
+mute_syntax: "&cPlease use /mute <player> <time> <reason>"
+unmute_syntax: "&cPlease use /unmute <player>"
+adminbans_syntax: "&cWrong command... Please use /adminbans help"
+#----------------------------------------------------------
+#                       Errors
+#----------------------------------------------------------
+mysql_not_connected: "&cCannot connect to database. Check if everything is right in config.yml"
+ban_error: "&cSomething went wrong while trying to ban {player}."
+kick_error: "&cSomething went wrong while trying to kick {player}."
+mute_error: "&cSomething went wrong while trying to mute {player}."
+#----------------------------------------------------------
+#                       Actions
+#----------------------------------------------------------
+player_ban: "&a{player} has been banned for {reason}"
+player_unban: "&a{player} is now unbanned."
+player_kick: "&a{player} has been kicked for {reason}"
+player_mute: "&a{player} has been muted for {reason}"
+player_unmute: "&a{player} is now unmuted."
+ban_message: "&4You have been banned for {reason}\n&cYour suspension expires on &c&l{time}"
+kick_message: "&4You have been kicked for {reason}"
+mute_message: "&cYou are muted!"

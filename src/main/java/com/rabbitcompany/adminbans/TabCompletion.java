@@ -143,6 +143,14 @@ public class TabCompletion implements TabCompleter {
                 }
             }
             return completions;
+        }else if(command.getName().equalsIgnoreCase("adminbans") || command.getName().equalsIgnoreCase("abans") || command.getName().equalsIgnoreCase("ab")){
+            List<String> completions = new ArrayList<>();
+
+            if(args.length == 1){
+                completions.add("help");
+                completions.add("reload");
+            }
+            return completions;
         }
 
         return null;

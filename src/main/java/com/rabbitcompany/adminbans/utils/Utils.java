@@ -13,7 +13,7 @@ public class Utils {
     public static String banReasonMessage(UUID target, String reason, String time){
         String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
 
-        return bumper + Message.getMessage(target, "ban") + Message.chat(reason) + "\n" + Message.getMessage(target, "ban_time") + time + bumper;
+        return bumper + Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time) + bumper;
     }
 
     public static String playerBannedMessage(UUID uuid){

@@ -8,6 +8,10 @@ description: Manage bans, warns, kicks and mutes.
 website: https://rabbit-company.com
 softdepend: [PlaceholderAPI]
 commands:
+  adminbans:
+    usage: /<command>
+    aliases: [abans, ab]
+    description: Show settings
   ban:
     usage: /<command>
     description: Ban player

@@ -16,7 +16,7 @@ public class Message {
     public static String getMessage(UUID player, String config){
         String message;
 
-        message = AdminBans.getInstance().getConf().getString(config);
+        message = AdminBans.getInstance().getMess().getString(config);
 
         if(message != null){
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
@@ -24,7 +24,7 @@ public class Message {
             }
             return chat(message);
         }else{
-            return chat("&cValue: &6" + config + "&c is missing in config file! Please add it or delete config file.");
+            return chat("&cValue: &6" + config + "&c is missing in Messages file! Please add it or delete Messages file.");
         }
     }
 }

@@ -2,6 +2,7 @@ package com.rabbitcompany.adminbans;
 
 import com.rabbitcompany.adminbans.commands.*;
 import com.rabbitcompany.adminbans.listeners.PlayerLoginListener;
+import com.rabbitcompany.adminbans.listeners.PlayerMessageListener;
 import com.rabbitcompany.adminbans.utils.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -27,10 +28,15 @@ public final class AdminBans extends JavaPlugin {
     private File co = null;
     private YamlConfiguration conf = new YamlConfiguration();
 
+    //Messages
+    private File me = null;
+    private YamlConfiguration mess = new YamlConfiguration();
+
     @Override
     public void onEnable() {
         instance = this;
         this.co = new File(getDataFolder(), "config.yml");
+        this.me = new File(getDataFolder(), "Messages.yml");
 
         mkdir();
         loadYamls();
@@ -46,6 +52,25 @@ public final class AdminBans extends JavaPlugin {
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS admin_gui_muted_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), until DATETIME NOT NULL, created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS admin_gui_warned_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS admin_gui_kicked_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
+
+                //Listeners
+                new PlayerLoginListener(this);
+                new PlayerMessageListener(this);
+
+                //Commands
+                this.getCommand("adminbans").setExecutor(new com.rabbitcompany.adminbans.commands.AdminBans());
+                this.getCommand("adminbans").setTabCompleter(new TabCompletion());
+                this.getCommand("ban").setExecutor(new Ban());
+                this.getCommand("ban").setTabCompleter(new TabCompletion());
+                this.getCommand("unban").setExecutor(new Unban());
+                this.getCommand("unban").setTabCompleter(new TabCompletion());
+                this.getCommand("kick").setExecutor(new Kick());
+                this.getCommand("kick").setTabCompleter(new TabCompletion());
+                this.getCommand("mute").setExecutor(new Mute());
+                this.getCommand("mute").setTabCompleter(new TabCompletion());
+                this.getCommand("unmute").setExecutor(new Unmute());
+                this.getCommand("unmute").setTabCompleter(new TabCompletion());
+
             } catch (SQLException e) {
                 conn = null;
                 Bukkit.getConsoleSender().sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "mysql_not_connected"));
@@ -56,20 +81,6 @@ public final class AdminBans extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
-        //Listeners
-        new PlayerLoginListener(this);
-
-        //Commands
-        this.getCommand("ban").setExecutor(new Ban());
-        this.getCommand("ban").setTabCompleter(new TabCompletion());
-        this.getCommand("unban").setExecutor(new Unban());
-        this.getCommand("unban").setTabCompleter(new TabCompletion());
-        this.getCommand("kick").setExecutor(new Kick());
-        this.getCommand("kick").setTabCompleter(new TabCompletion());
-        this.getCommand("mute").setExecutor(new Mute());
-        this.getCommand("mute").setTabCompleter(new TabCompletion());
-        this.getCommand("unmute").setExecutor(new Unmute());
-        this.getCommand("unmute").setTabCompleter(new TabCompletion());
     }
 
     @Override
@@ -91,6 +102,10 @@ public final class AdminBans extends JavaPlugin {
             saveResource("config.yml", false);
         }
 
+        if(!this.me.exists()){
+            saveResource("Messages.yml", false);
+        }
+
     }
 
     public void loadYamls(){
@@ -99,9 +114,17 @@ public final class AdminBans extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+
+        try{
+            this.mess.load(this.me);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     public YamlConfiguration getConf() { return this.conf; }
+
+    public YamlConfiguration getMess() { return this.mess; }
 
     private void info(String message){
         Bukkit.getConsoleSender().sendMessage(Message.chat(""));
