@@ -3,6 +3,9 @@ package com.rabbitcompany.adminbans;
 import com.rabbitcompany.adminbans.utils.BannedPlayer;
 import com.rabbitcompany.adminbans.utils.Message;
 import com.rabbitcompany.adminbans.utils.MutedPlayer;
+import com.rabbitcompany.adminbans.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -96,6 +99,17 @@ public class AdminBansAPI {
         if(AdminBans.conn != null) {
             try {
                 AdminBans.mySQL.update("INSERT INTO admin_gui_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "');");
+                Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
+                Player target_name = Bukkit.getPlayer(username_to);
+                if(target_uuid != null){
+                    if(target_uuid.isOnline()){
+                        target_uuid.kickPlayer(Utils.banReasonMessage(target_uuid.getUniqueId(), reason, until));
+                    }
+                }else if(target_name != null){
+                    if(target_name.isOnline()){
+                        target_name.kickPlayer(Utils.banReasonMessage(target_name.getUniqueId(), reason, until));
+                    }
+                }
                 return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", reason);
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "ban_error").replace("{player}", username_to);
@@ -122,7 +136,18 @@ public class AdminBansAPI {
         if(AdminBans.conn != null) {
             try {
                 AdminBans.mySQL.update("INSERT INTO admin_gui_kicked_players(uuid_from, username_from, uuid_to, username_to, reason) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "');");
-                return Message.getMessage(UUID.randomUUID(), "player_mute").replace("{player}", username_to).replace("{reason}", reason);
+                Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
+                Player target_name = Bukkit.getPlayer(username_to);
+                if(target_uuid != null){
+                    if(target_uuid.isOnline()){
+                        target_uuid.kickPlayer(Message.chat(Message.getMessage(target_uuid.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_uuid.getUniqueId(), "prefix"))));
+                    }
+                }else if(target_name != null){
+                    if(target_name.isOnline()){
+                        target_name.kickPlayer(Message.chat(Message.getMessage(target_name.getUniqueId(), "prefix") + Message.getMessage(target_name.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_name.getUniqueId(), "prefix"))));
+                    }
+                }
+                return Message.getMessage(UUID.randomUUID(), "player_kick").replace("{player}", username_to).replace("{reason}", reason);
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "kick_error").replace("{player}", username_to);
             }
@@ -144,12 +169,38 @@ public class AdminBansAPI {
         return false;
     }
 
+    public static boolean unBanPlayer(UUID player){
+        if(AdminBans.conn != null) {
+            if(isPlayerBanned(player)){
+                try {
+                    Date until = new Date(System.currentTimeMillis());
+                    AdminBans.mySQL.update("UPDATE admin_gui_banned_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
+                    return true;
+                } catch (SQLException ignored) { }
+            }
+        }
+        return false;
+    }
+
     public static boolean unMutePlayer(String player){
         if(AdminBans.conn != null) {
             if(isPlayerMuted(player)){
                 try {
                     Date until = new Date(System.currentTimeMillis());
                     AdminBans.mySQL.update("UPDATE admin_gui_muted_players SET until = '" + date_format.format(until) + "' WHERE username_to = '" + player + "';");
+                    return true;
+                } catch (SQLException ignored) { }
+            }
+        }
+        return false;
+    }
+
+    public static boolean unMutePlayer(UUID player){
+        if(AdminBans.conn != null) {
+            if(isPlayerMuted(player)){
+                try {
+                    Date until = new Date(System.currentTimeMillis());
+                    AdminBans.mySQL.update("UPDATE admin_gui_muted_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }

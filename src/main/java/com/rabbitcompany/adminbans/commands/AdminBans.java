@@ -17,18 +17,18 @@ public class AdminBans implements CommandExecutor {
             if(args.length == 1){
                 switch (args[0]){
                     case "help":
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "commands"));
+                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "commands"));
                         break;
                     case "reload":
                         com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "reload"));
+                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "reload"));
                         break;
                     default:
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
                         break;
                 }
             }else{
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
             }
 
             return true;
@@ -40,25 +40,25 @@ public class AdminBans implements CommandExecutor {
             if(args.length == 1){
                 switch (args[0]){
                     case "help":
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "commands"));
+                        sender.sendMessage( Message.getMessage(UUID.randomUUID(), "commands"));
                         break;
                     case "reload":
                         if(player.hasPermission("adminbans.reload")){
                             com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
-                            sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "reload"));
+                            sender.sendMessage(Message.getMessage(UUID.randomUUID(), "reload"));
                         }else{
-                            player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(),"permission"));
+                            player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
                         }
                         break;
                     default:
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
                         break;
                 }
             }else{
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
             }
         }else{
-            player.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(),"permission"));
+            player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
         }
 
         return true;

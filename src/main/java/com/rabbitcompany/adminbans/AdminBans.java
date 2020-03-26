@@ -73,11 +73,11 @@ public final class AdminBans extends JavaPlugin {
 
             } catch (SQLException e) {
                 conn = null;
-                Bukkit.getConsoleSender().sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "mysql_not_connected"));
+                Bukkit.getConsoleSender().sendMessage(Message.getMessage(UUID.randomUUID(), "mysql_not_connected"));
                 Bukkit.getPluginManager().disablePlugin(this);
             }
         }else{
-            Bukkit.getConsoleSender().sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "mysql_not_connected"));
+            Bukkit.getConsoleSender().sendMessage(Message.getMessage(UUID.randomUUID(), "mysql_not_connected"));
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
@@ -134,7 +134,7 @@ public final class AdminBans extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Name: &bAdminBans"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Developer: &bBlack1_TV"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Version: &b1.0.0"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Version: &b1.0.1"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8| &cSupport:"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));

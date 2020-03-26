@@ -20,7 +20,7 @@ public class Mute implements CommandExecutor {
 
         if(!(sender instanceof Player)) {
             if(args.length < 3){
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "mute_syntax"));
+                sender.sendMessage( Message.getMessage(UUID.randomUUID(), "mute_syntax"));
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
@@ -60,9 +60,9 @@ public class Mute implements CommandExecutor {
                     Date until = new Date(System.currentTimeMillis() + (number * time));
 
                     if(silence){
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + AdminBansAPI.mutePlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        sender.sendMessage(AdminBansAPI.mutePlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }else{
-                        Bukkit.broadcastMessage(Message.getMessage(UUID.randomUUID(), "prefix") + AdminBansAPI.mutePlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        Bukkit.broadcastMessage(AdminBansAPI.mutePlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }
 
                 }else{
@@ -76,7 +76,7 @@ public class Mute implements CommandExecutor {
 
         if(player.hasPermission("adminbans.mute")){
             if(args.length < 3){
-                player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "mute_syntax"));
+                player.sendMessage(Message.getMessage(player.getUniqueId(), "mute_syntax"));
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
@@ -116,17 +116,17 @@ public class Mute implements CommandExecutor {
                     Date until = new Date(System.currentTimeMillis() + (number * time));
 
                     if(silence){
-                        player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + AdminBansAPI.mutePlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        player.sendMessage(AdminBansAPI.mutePlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }else{
-                        Bukkit.broadcastMessage(Message.getMessage(player.getUniqueId(), "prefix") + AdminBansAPI.mutePlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        Bukkit.broadcastMessage(AdminBansAPI.mutePlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }
 
                 }else{
-                    player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "is_not_a_number").replace("{number}", str_time));
+                    player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_number").replace("{number}", str_time));
                 }
             }
         }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"prefix") + Message.getMessage(player.getUniqueId(), "permission"));
+            player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
         }
 
         return true;

@@ -5,7 +5,6 @@ import com.rabbitcompany.adminbans.utils.Message;
 import com.rabbitcompany.adminbans.utils.Utils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +20,7 @@ public class Ban implements CommandExecutor {
 
         if(!(sender instanceof Player)) {
             if(args.length < 3){
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "ban_syntax"));
+                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "ban_syntax"));
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
@@ -61,16 +60,9 @@ public class Ban implements CommandExecutor {
                     Date until = new Date(System.currentTimeMillis() + (number * time));
 
                     if(silence){
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        sender.sendMessage(AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }else{
-                        Bukkit.broadcastMessage(Message.getMessage(UUID.randomUUID(), "prefix") + AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
-                    }
-
-                    Player target_player = Bukkit.getServer().getPlayer(ChatColor.stripColor(str_player));
-                    if(target_player != null){
-                        if(target_player.isOnline()){
-                            target_player.kickPlayer(Utils.banReasonMessage(target_player.getUniqueId(), reason.toString(), AdminBansAPI.date_format.format(until)));
-                        }
+                        Bukkit.broadcastMessage(AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }
 
                 }else{
@@ -84,7 +76,7 @@ public class Ban implements CommandExecutor {
 
         if(player.hasPermission("adminbans.ban")){
             if(args.length < 3){
-                player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "ban_syntax"));
+                player.sendMessage( Message.getMessage(player.getUniqueId(), "ban_syntax"));
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
@@ -124,23 +116,17 @@ public class Ban implements CommandExecutor {
                     Date until = new Date(System.currentTimeMillis() + (number * time));
 
                     if(silence){
-                        player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
+                        player.sendMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }else{
-                        Bukkit.broadcastMessage(Message.getMessage(player.getUniqueId(), "prefix") + AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
-                    }
-                    Player target_player = Bukkit.getServer().getPlayer(ChatColor.stripColor(str_player));
-                    if(target_player != null){
-                        if(target_player.isOnline()){
-                            target_player.kickPlayer(Utils.banReasonMessage(target_player.getUniqueId(), reason.toString(), AdminBansAPI.date_format.format(until)));
-                        }
+                        Bukkit.broadcastMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }
 
                 }else{
-                    player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "is_not_a_number").replace("{number}", str_time));
+                    player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_number").replace("{number}", str_time));
                 }
             }
         }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"prefix") + Message.getMessage(player.getUniqueId(), "permission"));
+            player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
         }
 
         return true;

@@ -16,14 +16,14 @@ public class Unmute implements CommandExecutor {
 
         if(!(sender instanceof Player)) {
             if(args.length != 1){
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "unmute_syntax"));
+                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unmute_syntax"));
             }else{
                 String str_player = args[0];
                 if(AdminBansAPI.isPlayerMuted(str_player)){
                     AdminBansAPI.unMutePlayer(str_player);
-                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "player_unmute").replace("{player}", str_player));
+                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "player_unmute").replace("{player}", str_player));
                 }else{
-                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "prefix") + Message.getMessage(UUID.randomUUID(), "is_not_muted").replace("{player}", str_player));
+                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_muted").replace("{player}", str_player));
                 }
             }
             return true;
@@ -33,18 +33,18 @@ public class Unmute implements CommandExecutor {
 
         if(player.hasPermission("admingui.unmute")){
             if(args.length != 1){
-                player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "unmute_syntax"));
+                player.sendMessage(Message.getMessage(player.getUniqueId(), "unmute_syntax"));
             }else{
                 String str_player = args[0];
                 if(AdminBansAPI.isPlayerMuted(str_player)){
                     AdminBansAPI.unMutePlayer(str_player);
-                    player.sendMessage(Message.getMessage(player.getUniqueId(), "prefix") + Message.getMessage(player.getUniqueId(), "player_unmute").replace("{player}", str_player));
+                    player.sendMessage(Message.getMessage(player.getUniqueId(), "player_unmute").replace("{player}", str_player));
                 }else{
-                    player.sendMessage(Message.getMessage(player.getUniqueId(),"prefix") + Message.getMessage(player.getUniqueId(), "is_not_muted").replace("{player}", str_player));
+                    player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_muted").replace("{player}", str_player));
                 }
             }
         }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"prefix") + Message.getMessage(player.getUniqueId(), "permission"));
+            player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
         }
 
         return true;

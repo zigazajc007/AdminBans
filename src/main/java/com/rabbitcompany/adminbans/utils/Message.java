@@ -22,9 +22,13 @@ public class Message {
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
                 message = PlaceholderAPI.setPlaceholders(Bukkit.getPlayer(player), message);
             }
-            return chat(message);
+            return chat(message.replace("{prefix}", getPrefix()));
         }else{
             return chat("&cValue: &6" + config + "&c is missing in Messages file! Please add it or delete Messages file.");
         }
+    }
+
+    public static String getPrefix(){
+        return Message.chat(AdminBans.getInstance().getMess().getString("prefix"));
     }
 }

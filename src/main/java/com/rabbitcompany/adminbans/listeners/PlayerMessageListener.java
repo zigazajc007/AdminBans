@@ -24,7 +24,7 @@ public class PlayerMessageListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event){
         Player p = event.getPlayer();
         if(AdminBansAPI.isPlayerMuted(p.getUniqueId())){
-            p.sendMessage(Message.getMessage(p.getUniqueId(), "prefix") + Message.getMessage(p.getUniqueId(), "mute_message"));
+            p.sendMessage(Message.getMessage(p.getUniqueId(), "mute_message"));
             event.setCancelled(true);
         }
     }
