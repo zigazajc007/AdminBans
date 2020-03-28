@@ -18,7 +18,7 @@ public class Utils {
 
     public static String playerBannedMessage(UUID uuid){
         if(AdminBansAPI.isPlayerBanned(uuid)){
-            String query = "SELECT * FROM admin_gui_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
+            String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
             AtomicReference<String> reason = new AtomicReference<>("");
             AtomicReference<Date> until = new AtomicReference<>(new Date(System.currentTimeMillis()));
             try {

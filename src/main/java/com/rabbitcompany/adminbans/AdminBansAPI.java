@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AdminBansAPI {
 
     public static SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static boolean isPlayerBanned(String player){
-        String query = "SELECT * FROM admin_gui_banned_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_banned_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
         AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
         try {
             AdminBans.mySQL.query(query, results -> {
@@ -39,7 +40,7 @@ public class AdminBansAPI {
     }
 
     public static boolean isPlayerBanned(UUID uuid){
-        String query = "SELECT * FROM admin_gui_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
         AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
         try {
             AdminBans.mySQL.query(query, results -> {
@@ -58,7 +59,7 @@ public class AdminBansAPI {
     }
 
     public static boolean isPlayerMuted(String player){
-        String query = "SELECT * FROM admin_gui_muted_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_muted_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
         AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
         try {
             AdminBans.mySQL.query(query, results -> {
@@ -77,7 +78,7 @@ public class AdminBansAPI {
     }
 
     public static boolean isPlayerMuted(UUID uuid){
-        String query = "SELECT * FROM admin_gui_muted_players WHERE uuid_to = '" + uuid + "' ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_muted_players WHERE uuid_to = '" + uuid + "' ORDER BY until DESC;";
         AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
         try {
             AdminBans.mySQL.query(query, results -> {
@@ -98,7 +99,7 @@ public class AdminBansAPI {
     public static String banPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
         if(AdminBans.conn != null) {
             try {
-                AdminBans.mySQL.update("INSERT INTO admin_gui_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "');");
+                AdminBans.mySQL.update("INSERT INTO adminbans_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "');");
                 Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
                 Player target_name = Bukkit.getPlayer(username_to);
                 if(target_uuid != null){
@@ -122,7 +123,7 @@ public class AdminBansAPI {
     public static String mutePlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
         if(AdminBans.conn != null) {
             try {
-                AdminBans.mySQL.update("INSERT INTO admin_gui_muted_players(uuid_from, username_from, uuid_to, username_to, reason, until) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "');");
+                AdminBans.mySQL.update("INSERT INTO adminbans_muted_players(uuid_from, username_from, uuid_to, username_to, reason, until) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "');");
                 return Message.getMessage(UUID.randomUUID(), "player_mute").replace("{player}", username_to).replace("{reason}", reason);
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "mute_error").replace("{player}", username_to);
@@ -135,7 +136,7 @@ public class AdminBansAPI {
     public static String kickPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason){
         if(AdminBans.conn != null) {
             try {
-                AdminBans.mySQL.update("INSERT INTO admin_gui_kicked_players(uuid_from, username_from, uuid_to, username_to, reason) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "');");
+                AdminBans.mySQL.update("INSERT INTO adminbans_kicked_players(uuid_from, username_from, uuid_to, username_to, reason) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "');");
                 Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
                 Player target_name = Bukkit.getPlayer(username_to);
                 if(target_uuid != null){
@@ -156,12 +157,25 @@ public class AdminBansAPI {
         }
     }
 
+    public static String warnPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason){
+        if(AdminBans.conn != null) {
+            try {
+                AdminBans.mySQL.update("INSERT INTO adminbans_warned_players(uuid_from, username_from, uuid_to, username_to, reason) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "');");
+                return Message.getMessage(UUID.randomUUID(), "player_warn").replace("{player}", username_to).replace("{reason}", reason);
+            } catch (SQLException ignored) {
+                return Message.getMessage(UUID.randomUUID(), "warn_error").replace("{player}", username_to);
+            }
+        }else{
+            return Message.getMessage(UUID.randomUUID(), "mysql_not_connected");
+        }
+    }
+
     public static boolean unBanPlayer(String player){
         if(AdminBans.conn != null) {
             if(isPlayerBanned(player)){
                 try {
                     Date until = new Date(System.currentTimeMillis());
-                    AdminBans.mySQL.update("UPDATE admin_gui_banned_players SET until = '" + date_format.format(until) + "' WHERE username_to = '" + player + "';");
+                    AdminBans.mySQL.update("UPDATE adminbans_banned_players SET until = '" + date_format.format(until) + "' WHERE username_to = '" + player + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }
@@ -174,7 +188,7 @@ public class AdminBansAPI {
             if(isPlayerBanned(player)){
                 try {
                     Date until = new Date(System.currentTimeMillis());
-                    AdminBans.mySQL.update("UPDATE admin_gui_banned_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
+                    AdminBans.mySQL.update("UPDATE adminbans_banned_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }
@@ -187,7 +201,7 @@ public class AdminBansAPI {
             if(isPlayerMuted(player)){
                 try {
                     Date until = new Date(System.currentTimeMillis());
-                    AdminBans.mySQL.update("UPDATE admin_gui_muted_players SET until = '" + date_format.format(until) + "' WHERE username_to = '" + player + "';");
+                    AdminBans.mySQL.update("UPDATE adminbans_muted_players SET until = '" + date_format.format(until) + "' WHERE username_to = '" + player + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }
@@ -200,7 +214,7 @@ public class AdminBansAPI {
             if(isPlayerMuted(player)){
                 try {
                     Date until = new Date(System.currentTimeMillis());
-                    AdminBans.mySQL.update("UPDATE admin_gui_muted_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
+                    AdminBans.mySQL.update("UPDATE adminbans_muted_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }
@@ -208,10 +222,40 @@ public class AdminBansAPI {
         return false;
     }
 
+    public static int getPlayerWarnsCount(String player){
+        String query = "SELECT COUNT(*) AS warn_count FROM adminbans_warned_players WHERE uuid_to = '" + player + "';";
+            AtomicInteger getWarnCount = new AtomicInteger(0);
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                if (results.next()) {
+                    getWarnCount.set(results.getInt("warn_count"));
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return getWarnCount.get();
+    }
+
+    public static int getPlayerWarnsCount(UUID uuid){
+        String query = "SELECT COUNT(*) AS warn_count FROM adminbans_warned_players WHERE uuid_to = '" + uuid + "';";
+        AtomicInteger getWarnCount = new AtomicInteger(0);
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                if (results.next()) {
+                    getWarnCount.set(results.getInt("warn_count"));
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return getWarnCount.get();
+    }
+
     public static ArrayList<BannedPlayer> getBannedPlayers(){
         ArrayList<BannedPlayer> banned_players = new ArrayList<>();
 
-        String query = "SELECT * FROM admin_gui_banned_players ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_banned_players ORDER BY until DESC;";
 
         try {
             AdminBans.mySQL.query(query, results -> {
@@ -233,7 +277,7 @@ public class AdminBansAPI {
     public static ArrayList<MutedPlayer> getMutedPlayers(){
         ArrayList<MutedPlayer> mutedPlayers = new ArrayList<>();
 
-        String query = "SELECT * FROM admin_gui_muted_players ORDER BY until DESC;";
+        String query = "SELECT * FROM adminbans_muted_players ORDER BY until DESC;";
 
         try {
             AdminBans.mySQL.query(query, results -> {

@@ -70,7 +70,7 @@ public class TabCompletion implements TabCompleter {
             }
 
             return completions;
-        }else if(command.getName().equalsIgnoreCase("kick")) {
+        }else if(command.getName().equalsIgnoreCase("kick") || command.getName().equalsIgnoreCase("warn")) {
             List<String> completions = new ArrayList<>();
 
             if (args.length == 1) {

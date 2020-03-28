@@ -21,6 +21,9 @@ commands:
   kick:
     usage: /<command>
     description: Kick player
+  warn:
+    usage: /<command>
+    description: Warn player
   mute:
     usage: /<command>
     description: Mute player
