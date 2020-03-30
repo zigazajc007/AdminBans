@@ -24,7 +24,7 @@ public class PlayerLoginListener implements Listener {
         if(event.getResult() == PlayerLoginEvent.Result.ALLOWED){
 
             if(AdminBans.conn != null){
-                if(AdminBansAPI.isPlayerBanned(event.getPlayer().getUniqueId())){
+                if(AdminBansAPI.isPlayerBanned(event.getPlayer().getUniqueId(), AdminBansAPI.server_name)){
                     event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Utils.playerBannedMessage(event.getPlayer().getUniqueId()));
                 }
             }
