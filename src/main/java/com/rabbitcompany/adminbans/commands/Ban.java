@@ -80,13 +80,23 @@ public class Ban implements CommandExecutor {
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
+
+                Player target_player = Bukkit.getPlayer(str_player);
+
+                if(target_player != null){
+                    if(target_player.hasPermission("adminbans.ban.exempt")){
+                        player.sendMessage(Message.getMessage(player.getUniqueId(), "player_ban_exempt").replace("{player}", target_player.getName()));
+                        return true;
+                    }
+                }
+
                 StringBuilder reason = new StringBuilder();
                 boolean silence = false;
 
-                for (int i = 2; i < args.length; i++){
-                    if(!args[i].equals("-s")){
+                for (int i = 2; i < args.length; i++) {
+                    if (!args[i].equals("-s")) {
                         reason.append(args[i]).append(" ");
-                    }else{
+                    } else {
                         silence = true;
                     }
                 }
@@ -97,31 +107,31 @@ public class Ban implements CommandExecutor {
                 long mil_hour = 3600000L;
                 long mil_minute = 60000L;
 
-                if(NumberUtils.isNumber(Utils.stripNonDigits(str_time))){
+                if (NumberUtils.isNumber(Utils.stripNonDigits(str_time))) {
                     int number = Integer.parseInt(Utils.stripNonDigits(str_time));
                     long time = 0L;
 
-                    if(str_time.contains("min") || str_time.contains("minute") || str_time.contains("minutes")){
+                    if (str_time.contains("min") || str_time.contains("minute") || str_time.contains("minutes")) {
                         time = mil_minute;
-                    }else if(str_time.contains("h") || str_time.contains("hour") || str_time.contains("hours")){
+                    } else if (str_time.contains("h") || str_time.contains("hour") || str_time.contains("hours")) {
                         time = mil_hour;
-                    }else if(str_time.contains("d") || str_time.contains("day") || str_time.contains("days")){
+                    } else if (str_time.contains("d") || str_time.contains("day") || str_time.contains("days")) {
                         time = mil_day;
-                    }else if(str_time.contains("m") || str_time.contains("month") || str_time.contains("months")){
+                    } else if (str_time.contains("m") || str_time.contains("month") || str_time.contains("months")) {
                         time = mil_month;
-                    }else if(str_time.contains("y") || str_time.contains("year") || str_time.contains("years")){
+                    } else if (str_time.contains("y") || str_time.contains("year") || str_time.contains("years")) {
                         time = mil_year;
                     }
 
                     Date until = new Date(System.currentTimeMillis() + (number * time));
 
-                    if(silence){
+                    if (silence) {
                         player.sendMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
-                    }else{
+                    } else {
                         Bukkit.broadcastMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, reason.toString(), AdminBansAPI.date_format.format(until)));
                     }
 
-                }else{
+                } else {
                     player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_number").replace("{number}", str_time));
                 }
             }

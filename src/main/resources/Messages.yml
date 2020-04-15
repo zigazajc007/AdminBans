@@ -77,3 +77,10 @@ player_unmute: "{prefix} &a{player} is now unmuted."
 ban_message: "&4You have been banned for {reason}\n&cYour suspension expires on &c&l{time}"
 kick_message: "&4You have been kicked for {reason}"
 mute_message: "{prefix} &cYou are muted!"
+#----------------------------------------------------------
+#                        Exempt
+#----------------------------------------------------------
+player_ban_exempt: "{prefix} &c{player} can't be banned."
+player_kick_exempt: "{prefix} &c{player} can't be kicked."
+player_warn_exempt: "{prefix} &c{player} can't be warned."
+player_mute_exempt: "{prefix} &c{player} can't be muted."

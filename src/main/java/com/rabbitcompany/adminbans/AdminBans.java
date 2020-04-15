@@ -20,17 +20,19 @@ public final class AdminBans extends JavaPlugin {
 
     private static AdminBans instance;
 
+    String username = "%%__USERNAME__%%";
+
     //SQL
     public static MySQL mySQL;
     public static Connection conn = null;
 
     //Config
     private File co = null;
-    private YamlConfiguration conf = new YamlConfiguration();
+    private final YamlConfiguration conf = new YamlConfiguration();
 
     //Messages
     private File me = null;
-    private YamlConfiguration mess = new YamlConfiguration();
+    private final YamlConfiguration mess = new YamlConfiguration();
 
     @Override
     public void onEnable() {
@@ -130,21 +132,22 @@ public final class AdminBans extends JavaPlugin {
 
     private void info(String message){
         Bukkit.getConsoleSender().sendMessage(Message.chat(""));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8[]=====[" + message + " &cAdminBans&8]=====[]"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8| &cInformation:"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Name: &bAdminBans"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Developer: &bBlack1_TV"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Version: &b1.0.3"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8| &cSupport:"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Discord: &bCrazy Rabbit#0001"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Mail: &bziga.zajc007@gmail.com"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|   &9Discord: &bhttps://discord.gg/hUNymXX"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8|"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&8[]=====================================[]"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====[" + message + " &cAdminBans&6]=====[]"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cInformation:"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.4"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cSupport:"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Discord: &bCrazy Rabbit#0001"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Mail: &bziga.zajc007@gmail.com"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Discord: &bhttps://discord.gg/hUNymXX"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====================================[]"));
         Bukkit.getConsoleSender().sendMessage(Message.chat(""));
     }
 

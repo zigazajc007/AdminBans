@@ -48,6 +48,12 @@ public class Kick implements CommandExecutor {
             }else{
                 Player target = Bukkit.getPlayer(args[0]);
                 if(target != null){
+
+                    if(target.hasPermission("adminbans.kick.exempt")){
+                        player.sendMessage(Message.getMessage(player.getUniqueId(), "player_kick_exempt").replace("{player}", target.getName()));
+                        return true;
+                    }
+
                     if(target.isOnline()) {
                         StringBuilder message = new StringBuilder();
 

@@ -132,7 +132,7 @@ public class TabCompletion implements TabCompleter {
             }
 
             return completions;
-        }else if(command.getName().equalsIgnoreCase("unban")){
+        }else if(command.getName().equalsIgnoreCase("unmute")){
             List<String> completions = new ArrayList<>();
 
             if(args.length == 1){

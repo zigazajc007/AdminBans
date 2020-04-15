@@ -80,6 +80,16 @@ public class Mute implements CommandExecutor {
             }else{
                 String str_player = args[0];
                 String str_time = args[1];
+
+                Player target_player = Bukkit.getPlayer(str_player);
+
+                if(target_player != null){
+                    if(target_player.hasPermission("adminbans.mute.exempt")){
+                        player.sendMessage(Message.getMessage(player.getUniqueId(), "player_mute_exempt").replace("{player}", target_player.getName()));
+                        return true;
+                    }
+                }
+
                 StringBuilder reason = new StringBuilder();
                 boolean silence = false;
 
