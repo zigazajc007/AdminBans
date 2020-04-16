@@ -40,22 +40,22 @@ public class AdminBans implements CommandExecutor {
             if(args.length == 1){
                 switch (args[0]){
                     case "help":
-                        sender.sendMessage( Message.getMessage(UUID.randomUUID(), "commands"));
+                        player.sendMessage(Message.getMessage(player.getUniqueId(), "commands"));
                         break;
                     case "reload":
                         if(player.hasPermission("adminbans.reload")){
                             com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
-                            sender.sendMessage(Message.getMessage(UUID.randomUUID(), "reload"));
+                            player.sendMessage(Message.getMessage(player.getUniqueId(), "reload"));
                         }else{
                             player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
                         }
                         break;
                     default:
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                        player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
                         break;
                 }
             }else{
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
+                player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
             }
         }else{
             player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));

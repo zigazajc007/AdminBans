@@ -16,6 +16,12 @@ public class Utils {
         return bumper + Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time) + bumper;
     }
 
+    public static String banIPMessage(){
+        String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
+
+        return bumper + Message.getMessage(UUID.randomUUID(), "ip_ban_message") + bumper;
+    }
+
     public static String playerBannedMessage(UUID uuid){
         if(AdminBansAPI.isPlayerBanned(uuid)){
             String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";

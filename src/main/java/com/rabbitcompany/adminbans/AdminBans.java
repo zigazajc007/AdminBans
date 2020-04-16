@@ -51,6 +51,7 @@ public final class AdminBans extends JavaPlugin {
                 mySQL = new MySQL(getConf().getString("mysql_host"), getConf().getString("mysql_port"), getConf().getString("mysql_database"), getConf().getString("mysql_user"), getConf().getString("mysql_password"), "?useSSL=" + getConf().getBoolean("mysql_useSSL") +"&allowPublicKeyRetrieval=true");
                 conn = mySQL.getConnection();
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS adminbans_banned_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), until DATETIME NOT NULL, server VARCHAR(30) NOT NULL DEFAULT 'Global', created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
+                conn.createStatement().execute("CREATE TABLE IF NOT EXISTS adminbans_banned_ips(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, ip varchar(15) NOT NULL, server VARCHAR(30) NOT NULL DEFAULT 'Global')");
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS adminbans_muted_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), until DATETIME NOT NULL, server VARCHAR(30) NOT NULL DEFAULT 'Global', created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS adminbans_warned_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), server VARCHAR(30) NOT NULL DEFAULT 'Global', created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
                 conn.createStatement().execute("CREATE TABLE IF NOT EXISTS adminbans_kicked_players(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, uuid_from CHAR(36) NOT NULL, username_from varchar(25) NOT NULL, uuid_to CHAR(36) NOT NULL, username_to varchar(25) NOT NULL, reason VARCHAR(255), server VARCHAR(30) NOT NULL DEFAULT 'Global', created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
@@ -74,6 +75,10 @@ public final class AdminBans extends JavaPlugin {
                 this.getCommand("mute").setTabCompleter(new TabCompletion());
                 this.getCommand("unmute").setExecutor(new Unmute());
                 this.getCommand("unmute").setTabCompleter(new TabCompletion());
+                this.getCommand("banip").setExecutor(new BanIP());
+                this.getCommand("ban-ip").setExecutor(new BanIP());
+                this.getCommand("unbanip").setExecutor(new UnbanIP());
+                this.getCommand("unbanip").setTabCompleter(new TabCompletion());
 
             } catch (SQLException e) {
                 conn = null;
@@ -139,7 +144,7 @@ public final class AdminBans extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.4"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.5"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cSupport:"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));

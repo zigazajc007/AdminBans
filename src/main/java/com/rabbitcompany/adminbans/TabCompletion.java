@@ -1,5 +1,6 @@
 package com.rabbitcompany.adminbans;
 
+import com.rabbitcompany.adminbans.utils.BannedIP;
 import com.rabbitcompany.adminbans.utils.BannedPlayer;
 import com.rabbitcompany.adminbans.utils.MutedPlayer;
 import org.bukkit.Bukkit;
@@ -140,6 +141,17 @@ public class TabCompletion implements TabCompleter {
 
                 for (MutedPlayer mutedPlayers : bp) {
                     completions.add(mutedPlayers.username_to);
+                }
+            }
+            return completions;
+        }else if(command.getName().equalsIgnoreCase("unbanip")){
+            List<String> completions = new ArrayList<>();
+
+            if(args.length == 1){
+                ArrayList<BannedIP> bp = AdminBansAPI.getBannedIPs();
+
+                for (BannedIP bannedIP : bp) {
+                    completions.add(bannedIP.ip);
                 }
             }
             return completions;

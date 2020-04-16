@@ -2,9 +2,12 @@
   <dictionary name="ziga">
     <words>
       <w>adminbans</w>
+      <w>banip</w>
       <w>griefing</w>
       <w>unban</w>
+      <w>unbanip</w>
       <w>unmute</w>
+      <w>unmuted</w>
     </words>
   </dictionary>
 </component>

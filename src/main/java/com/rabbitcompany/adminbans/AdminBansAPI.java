@@ -1,9 +1,6 @@
 package com.rabbitcompany.adminbans;
 
-import com.rabbitcompany.adminbans.utils.BannedPlayer;
-import com.rabbitcompany.adminbans.utils.Message;
-import com.rabbitcompany.adminbans.utils.MutedPlayer;
-import com.rabbitcompany.adminbans.utils.Utils;
+import com.rabbitcompany.adminbans.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -20,6 +17,12 @@ public class AdminBansAPI {
 
     public static String server_name = AdminBans.getInstance().getConf().getString("server_name");
     public static SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static boolean isIPValid(final String ip) {
+        String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
+
+        return ip.matches(PATTERN);
+    }
 
     public static boolean isPlayerBanned(String player){
         String query = "SELECT * FROM adminbans_banned_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
@@ -95,6 +98,36 @@ public class AdminBansAPI {
             e.printStackTrace();
         }
         return isPlayerBanned.get();
+    }
+
+    public static boolean isIPBanned(String ip){
+        String query = "SELECT * FROM adminbans_banned_ips WHERE ip = '" + ip + "';";
+        AtomicBoolean isIPBanned = new AtomicBoolean(false);
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                if (results.next()) {
+                    isIPBanned.set(true);
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isIPBanned.get();
+    }
+
+    public static boolean isIPBanned(String ip, String server){
+        String query = "SELECT * FROM adminbans_banned_ips WHERE ip = '" + ip + "' AND server = '" + server + "';";
+        AtomicBoolean isIPBanned = new AtomicBoolean(false);
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                if (results.next()) {
+                    isIPBanned.set(true);
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isIPBanned.get();
     }
 
     public static boolean isPlayerMuted(String player){
@@ -197,6 +230,52 @@ public class AdminBansAPI {
         }
     }
 
+    public static String banIP(String ip){
+        if(AdminBans.conn != null) {
+            try {
+                AdminBans.mySQL.update("INSERT INTO adminbans_banned_ips(ip) VALUES ('" + ip + "');");
+                for(Player target : Bukkit.getOnlinePlayers()){
+                    if(target != null){
+                        if(target.isOnline()){
+                            if(target.getAddress().getHostName().equals(ip)){
+                                target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
+                            }
+                        }
+                    }
+                }
+                return Message.getMessage(UUID.randomUUID(), "ip_ban").replace("{ip}", ip);
+            } catch (SQLException ignored) {
+                return Message.getMessage(UUID.randomUUID(), "ban_ip_error").replace("{ip}", ip);
+            }
+        }else{
+            return Message.getMessage(UUID.randomUUID(), "mysql_not_connected");
+        }
+    }
+
+    public static String banIP(String ip, String server){
+        if(AdminBans.conn != null) {
+            try {
+                AdminBans.mySQL.update("INSERT INTO adminbans_banned_ips(ip, server) VALUES ('" + ip + "', '" + server + "');");
+                if(server_name.equals(server)){
+                    for(Player target : Bukkit.getOnlinePlayers()){
+                        if(target != null){
+                            if(target.isOnline()){
+                                if(target.getAddress().getHostName().equals(ip)){
+                                    target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
+                                }
+                            }
+                        }
+                    }
+                }
+                return Message.getMessage(UUID.randomUUID(), "ip_ban").replace("{ip}", ip);
+            } catch (SQLException ignored) {
+                return Message.getMessage(UUID.randomUUID(), "ban_ip_error").replace("{ip}", ip);
+            }
+        }else{
+            return Message.getMessage(UUID.randomUUID(), "mysql_not_connected");
+        }
+    }
+
     public static String mutePlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
         if(AdminBans.conn != null) {
             try {
@@ -266,6 +345,30 @@ public class AdminBansAPI {
                 try {
                     Date until = new Date(System.currentTimeMillis());
                     AdminBans.mySQL.update("UPDATE adminbans_banned_players SET until = '" + date_format.format(until) + "' WHERE uuid_to = '" + player + "';");
+                    return true;
+                } catch (SQLException ignored) { }
+            }
+        }
+        return false;
+    }
+
+    public static boolean unBanIP(String ip){
+        if(AdminBans.conn != null) {
+            if(isIPBanned(ip)){
+                try {
+                    AdminBans.mySQL.update("DELETE FROM adminbans_banned_ips WHERE ip = '" + ip + "';");
+                    return true;
+                } catch (SQLException ignored) { }
+            }
+        }
+        return false;
+    }
+
+    public static boolean unBanIP(String ip, String server){
+        if(AdminBans.conn != null) {
+            if(isIPBanned(ip, server)){
+                try {
+                    AdminBans.mySQL.update("DELETE FROM adminbans_banned_ips WHERE ip = '" + ip + "' AND server = '" + server + "';");
                     return true;
                 } catch (SQLException ignored) { }
             }
@@ -401,6 +504,42 @@ public class AdminBansAPI {
         }
 
         return banned_players;
+    }
+
+    public static ArrayList<BannedIP> getBannedIPs(){
+        ArrayList<BannedIP> banned_ips = new ArrayList<>();
+
+        String query = "SELECT * FROM adminbans_banned_ips;";
+
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                while (results.next()){
+                    banned_ips.add(new BannedIP(results.getString("ip"), results.getString("server")));
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return banned_ips;
+    }
+
+    public static ArrayList<BannedIP> getBannedIPs(String server){
+        ArrayList<BannedIP> banned_ips = new ArrayList<>();
+
+        String query = "SELECT * FROM adminbans_banned_ips WHERE server = '" + server + "';";
+
+        try {
+            AdminBans.mySQL.query(query, results -> {
+                while (results.next()){
+                    banned_ips.add(new BannedIP(results.getString("ip"), results.getString("server")));
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return banned_ips;
     }
 
     public static ArrayList<MutedPlayer> getMutedPlayers(){

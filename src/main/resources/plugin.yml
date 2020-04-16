@@ -15,9 +15,18 @@ commands:
   ban:
     usage: /<command>
     description: Ban player
+  banip:
+    usage: /<command>
+    description: Ban ip
+  ban-ip:
+    usage: /<command>
+    description: Ban ip
   unban:
     usage: /<command>
     description: Unban player
+  unbanip:
+    usage: /<command>
+    description: Unban ip
   kick:
     usage: /<command>
     description: Kick player

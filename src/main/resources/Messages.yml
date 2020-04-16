@@ -47,6 +47,7 @@ is_not_a_number: "{prefix} &c{number} isn't a number!"
 is_not_online: "{prefix} &cPlayer {player} isn't online."
 is_not_banned: "{prefix} &a{player} isn't banned."
 is_not_muted: "{prefix} &a{player} isn't muted."
+is_not_ip: "{prefix} &c{ip} is not valid IP address."
 #----------------------------------------------------------
 #                       Syntax
 #----------------------------------------------------------
@@ -56,6 +57,8 @@ kick_syntax: "{prefix} &cPlease use /kick <player> <reason>"
 warn_syntax: "{prefix} &cPlease use /warn <player> <reason>"
 mute_syntax: "{prefix} &cPlease use /mute <player> <time> <reason>"
 unmute_syntax: "{prefix} &cPlease use /unmute <player>"
+banip_syntax: "{prefix} &cPlease use /banip <address>"
+unbanip_syntax: "{prefix} &cPlease use /unbanip <address>"
 adminbans_syntax: "{prefix} &cWrong command... Please use /adminbans help"
 #----------------------------------------------------------
 #                       Errors
@@ -65,6 +68,8 @@ ban_error: "{prefix} &cSomething went wrong while trying to ban {player}."
 kick_error: "{prefix} &cSomething went wrong while trying to kick {player}."
 warn_error: "{prefix} &cSomething went wrong while trying to warn {player}."
 mute_error: "{prefix} &cSomething went wrong while trying to mute {player}."
+ban_ip_error: "{prefix} &cSomething went wrong while trying to ban ip {ip}."
+unban_ip_error: "{prefix} &cSomething went wrong while trying to unban ip {ip}."
 #----------------------------------------------------------
 #                       Actions
 #----------------------------------------------------------
@@ -77,6 +82,9 @@ player_unmute: "{prefix} &a{player} is now unmuted."
 ban_message: "&4You have been banned for {reason}\n&cYour suspension expires on &c&l{time}"
 kick_message: "&4You have been kicked for {reason}"
 mute_message: "{prefix} &cYou are muted!"
+ip_ban: "{prefix} &aIP: {ip} has been banned successfully."
+ip_ban_message: "&4Your IP has been banned from the server."
+ip_unban: "{prefix} &aIP: {ip} has been unbanned successfully."
 #----------------------------------------------------------
 #                        Exempt
 #----------------------------------------------------------
