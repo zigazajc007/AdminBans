@@ -60,7 +60,7 @@ public class Kick implements CommandExecutor {
                         for (int i = 1; i < args.length; i++){
                             message.append(args[i]).append(" ");
                         }
-
+                        
                         player.sendMessage(AdminBansAPI.kickPlayer(player.getUniqueId().toString(), player.getName(), target.getUniqueId().toString(), target.getName(), message.toString()));
                     }else{
                         player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_online").replace("{player}", target.getName()));

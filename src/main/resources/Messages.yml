@@ -85,6 +85,8 @@ mute_message: "{prefix} &cYou are muted!"
 ip_ban: "{prefix} &aIP: {ip} has been banned successfully."
 ip_ban_message: "&4Your IP has been banned from the server."
 ip_unban: "{prefix} &aIP: {ip} has been unbanned successfully."
+banned_players: "&aBanned players:"
+muted_players: "&aMuted players:"
 #----------------------------------------------------------
 #                        Exempt
 #----------------------------------------------------------

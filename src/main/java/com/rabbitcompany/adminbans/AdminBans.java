@@ -79,6 +79,8 @@ public final class AdminBans extends JavaPlugin {
                 this.getCommand("ban-ip").setExecutor(new BanIP());
                 this.getCommand("unbanip").setExecutor(new UnbanIP());
                 this.getCommand("unbanip").setTabCompleter(new TabCompletion());
+                this.getCommand("banlist").setExecutor(new BanList());
+                this.getCommand("mutelist").setExecutor(new MuteList());
 
             } catch (SQLException e) {
                 conn = null;
@@ -144,7 +146,7 @@ public final class AdminBans extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.5"));
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.6"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cSupport:"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));

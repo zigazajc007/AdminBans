@@ -39,3 +39,9 @@ commands:
   unmute:
     usage: /<command>
     description: Unmute player
+  banlist:
+    usage: /<command>
+    description: Show all banned players
+  mutelist:
+    usage: /<command>
+    description: Show all muted players
