@@ -37,7 +37,7 @@
 #----------------------------------------------------------
 server_name: "Global"
 #----------------------------------------------------------
-#               MySQL Database - Required
+#   MySQL Database - Must be used for Website Interface
 #----------------------------------------------------------
 # Do you want to use mysql database?
 mysql: false
