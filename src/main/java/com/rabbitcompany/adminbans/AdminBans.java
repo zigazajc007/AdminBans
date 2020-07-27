@@ -42,7 +42,7 @@ public final class AdminBans extends JavaPlugin {
         mkdir();
         loadYamls();
 
-        info("&aEnabling");
+        info("&aEnabling...");
 
         //Database connection
         if(getConf().getBoolean("mysql", false)){
@@ -81,7 +81,7 @@ public final class AdminBans extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        info("&4Disabling");
+        info("&4Disabling...");
 
         if(conn != null){
             try {
