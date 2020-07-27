@@ -3,7 +3,7 @@ version: ${project.version}
 main: com.rabbitcompany.adminbans.AdminBans
 api-version: 1.13
 load: STARTUP
-authors: [Black1_TV]
+authors: [CrazyRabbit]
 description: Manage bans, warns, kicks and mutes.
 website: https://rabbit-company.com
 softdepend: [PlaceholderAPI]
