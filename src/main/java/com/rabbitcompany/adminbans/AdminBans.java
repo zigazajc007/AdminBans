@@ -20,6 +20,7 @@ public final class AdminBans extends JavaPlugin {
     private static AdminBans instance;
 
     String username = "%%__USERNAME__%%";
+    String user_id = "%%__USER__%%";
 
     //Database
     public static HikariDataSource hikari;
@@ -183,8 +184,14 @@ public final class AdminBans extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
-        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.7"));
+        if(!username.contains("%%__")){
+            Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
+        }else if(!user_id.contains("%%__")){
+            Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + user_id));
+        }else{
+            Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &4&lCRACKED"));
+        }
+        Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b1.0.8"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cSupport:"));
         Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));

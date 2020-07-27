@@ -562,11 +562,7 @@ public class AdminBansAPI {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
-                }
+                banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
             }
             conn.close();
         } catch (SQLException throwables) {
@@ -586,11 +582,7 @@ public class AdminBansAPI {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
-                }
+                banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
             }
             conn.close();
         } catch (SQLException throwables) {
