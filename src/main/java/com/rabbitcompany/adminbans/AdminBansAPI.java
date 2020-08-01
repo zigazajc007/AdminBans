@@ -34,7 +34,7 @@ public class AdminBansAPI {
             if(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     isPlayerBanned.set(true);
                 }
             }
@@ -57,7 +57,7 @@ public class AdminBansAPI {
             if(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     isPlayerBanned.set(true);
                 }
             }
@@ -80,7 +80,7 @@ public class AdminBansAPI {
             if(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     isPlayerBanned.set(true);
                 }
             }
@@ -103,7 +103,7 @@ public class AdminBansAPI {
             if(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     isPlayerBanned.set(true);
                 }
             }
@@ -260,7 +260,11 @@ public class AdminBansAPI {
                         target_name.kickPlayer(Utils.banReasonMessage(target_name.getUniqueId(), reason, until));
                     }
                 }
-                return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", reason);
+                if(reason == null){
+                    return Message.getMessage(UUID.randomUUID(), "player_ban_no_reason").replace("{player}", username_to);
+                }else{
+                    return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", reason);
+                }
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "ban_error").replace("{player}", username_to);
             }
@@ -516,7 +520,7 @@ public class AdminBansAPI {
             while(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     banned_players.add(new BannedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
                 }
             }
@@ -540,7 +544,7 @@ public class AdminBansAPI {
             while(rs.next()){
                 Timestamp until = rs.getTimestamp("until");
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
+                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
                     banned_players.add(new BannedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
                 }
             }
