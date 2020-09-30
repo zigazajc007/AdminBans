@@ -12,8 +12,12 @@ public class Utils {
 
     public static String banReasonMessage(UUID target, String reason, String time){
         String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
-        if(time.equals("292278994-08-17 07:12:55") || time.equals("292278994-08-17 08:12:55")){
-            return bumper + Message.getMessage(target, "ban_message_perm") + bumper;
+        if(time.equals("9999-12-31 23:59:59")){
+            if(reason == null || reason.equals("null")){
+                return bumper + Message.getMessage(target, "ban_message_perm_no_reason") + bumper;
+            }else{
+                return bumper + Message.getMessage(target, "ban_message_perm").replace("{reason}", reason) + bumper;
+            }
         }else if(reason == null || reason.equals("null")){
             return bumper + Message.getMessage(target, "ban_message_no_reason").replace("{time}", time) + bumper;
         }else{

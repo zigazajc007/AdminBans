@@ -21,8 +21,7 @@ public class Ban implements CommandExecutor {
         if(!(sender instanceof Player)) {
             if(args.length == 1) {
                 String str_player = args[0];
-                Date until = new Date(Long.MAX_VALUE);
-                Bukkit.broadcastMessage(AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, null, AdminBansAPI.date_format.format(until)));
+                Bukkit.broadcastMessage(AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, null, "9999-12-31 23:59:59"));
             }else if(args.length == 2){
                 String str_player = args[0];
                 String str_time = args[1];
@@ -124,8 +123,7 @@ public class Ban implements CommandExecutor {
                     }
                 }
 
-                Date until = new Date(Long.MAX_VALUE);
-                Bukkit.broadcastMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, null, AdminBansAPI.date_format.format(until)));
+                Bukkit.broadcastMessage(AdminBansAPI.banPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, null, "9999-12-31 23:59:59"));
             }else if(args.length == 2){
                 String str_player = args[0];
                 String str_time = args[1];

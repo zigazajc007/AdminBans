@@ -245,6 +245,9 @@ public class AdminBansAPI {
     }
 
     public static String banPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
+
+        if(until == null) until = "9999-12-31 23:59:59";
+
             try {
                 Connection conn = AdminBans.hikari.getConnection();
                 conn.createStatement().executeUpdate("INSERT INTO adminbans_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "');");
@@ -313,6 +316,7 @@ public class AdminBansAPI {
     }
 
     public static String mutePlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
+        if(until == null) until = "9999-12-31 23:59:59";
             try {
                 Connection conn = AdminBans.hikari.getConnection();
                 conn.createStatement().executeUpdate("INSERT INTO adminbans_muted_players(uuid_from, username_from, uuid_to, username_to, reason, until, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "');");

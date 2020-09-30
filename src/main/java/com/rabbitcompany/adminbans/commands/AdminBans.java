@@ -5,15 +5,12 @@ import com.rabbitcompany.adminbans.utils.Message;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Set;
 import java.util.UUID;
 
 public class AdminBans implements CommandExecutor {
