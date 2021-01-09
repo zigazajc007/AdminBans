@@ -250,7 +250,7 @@ public class AdminBansAPI {
 
             try {
                 Connection conn = AdminBans.hikari.getConnection();
-                conn.createStatement().executeUpdate("INSERT INTO adminbans_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "');");
+                conn.createStatement().executeUpdate("INSERT INTO adminbans_banned_players(uuid_from, username_from, uuid_to, username_to, reason, until, server, created) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "', '" + date_format.format(new Date()) + "');");
                 conn.close();
                 Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
                 Player target_name = Bukkit.getPlayer(username_to);
@@ -263,10 +263,10 @@ public class AdminBansAPI {
                         target_name.kickPlayer(Utils.banReasonMessage(target_name.getUniqueId(), reason, until));
                     }
                 }
-                if(reason == null){
+                if(reason == null || reason.length() == 0){
                     return Message.getMessage(UUID.randomUUID(), "player_ban_no_reason").replace("{player}", username_to);
                 }else{
-                    return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", reason);
+                    return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", Message.chat(reason));
                 }
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "ban_error").replace("{player}", username_to);
@@ -319,9 +319,9 @@ public class AdminBansAPI {
         if(until == null) until = "9999-12-31 23:59:59";
             try {
                 Connection conn = AdminBans.hikari.getConnection();
-                conn.createStatement().executeUpdate("INSERT INTO adminbans_muted_players(uuid_from, username_from, uuid_to, username_to, reason, until, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "');");
+                conn.createStatement().executeUpdate("INSERT INTO adminbans_muted_players(uuid_from, username_from, uuid_to, username_to, reason, until, server, created) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + until + "', '" + server_name + "', '" + date_format.format(new Date()) + "');");
                 conn.close();
-                return Message.getMessage(UUID.randomUUID(), "player_mute").replace("{player}", username_to).replace("{reason}", reason);
+                return Message.getMessage(UUID.randomUUID(), "player_mute").replace("{player}", username_to).replace("{reason}", Message.chat(reason));
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "mute_error").replace("{player}", username_to);
             }
@@ -330,7 +330,7 @@ public class AdminBansAPI {
     public static String kickPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason){
             try {
                 Connection conn = AdminBans.hikari.getConnection();
-                conn.createStatement().executeUpdate("INSERT INTO adminbans_kicked_players(uuid_from, username_from, uuid_to, username_to, reason, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + server_name + "');");
+                conn.createStatement().executeUpdate("INSERT INTO adminbans_kicked_players(uuid_from, username_from, uuid_to, username_to, reason, server, created) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + server_name + "', '" + date_format.format(new Date()) + "');");
                 conn.close();
                 Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
                 Player target_name = Bukkit.getPlayer(username_to);
@@ -352,9 +352,9 @@ public class AdminBansAPI {
     public static String warnPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason){
             try {
                 Connection conn = AdminBans.hikari.getConnection();
-                conn.createStatement().executeUpdate("INSERT INTO adminbans_warned_players(uuid_from, username_from, uuid_to, username_to, reason, server) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + server_name + "');");
+                conn.createStatement().executeUpdate("INSERT INTO adminbans_warned_players(uuid_from, username_from, uuid_to, username_to, reason, server, created) VALUES ('" + uuid_from + "', '" + username_from + "', '" + uuid_to + "', '" + username_to + "', '" + reason + "', '" + server_name + "', '" + date_format.format(new Date()) + "');");
                 conn.close();
-                return Message.getMessage(UUID.randomUUID(), "player_warn").replace("{player}", username_to).replace("{reason}", reason);
+                return Message.getMessage(UUID.randomUUID(), "player_warn").replace("{player}", username_to).replace("{reason}", Message.chat(reason));
             } catch (SQLException ignored) {
                 return Message.getMessage(UUID.randomUUID(), "warn_error").replace("{player}", username_to);
             }
