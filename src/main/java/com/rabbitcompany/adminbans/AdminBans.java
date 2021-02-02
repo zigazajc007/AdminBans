@@ -1,6 +1,7 @@
 package com.rabbitcompany.adminbans;
 
 import com.rabbitcompany.adminbans.commands.*;
+import com.rabbitcompany.adminbans.listeners.PlayerCommandListener;
 import com.rabbitcompany.adminbans.listeners.PlayerLoginListener;
 import com.rabbitcompany.adminbans.listeners.PlayerMessageListener;
 import com.rabbitcompany.adminbans.utils.Message;
@@ -55,6 +56,7 @@ public final class AdminBans extends JavaPlugin {
         //Listeners
         new PlayerLoginListener(this);
         new PlayerMessageListener(this);
+        new PlayerCommandListener(this);
 
         //Commands
         this.getCommand("adminbans").setExecutor(new com.rabbitcompany.adminbans.commands.AdminBans());
