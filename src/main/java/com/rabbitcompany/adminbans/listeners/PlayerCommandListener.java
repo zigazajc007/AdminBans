@@ -24,7 +24,7 @@ public class PlayerCommandListener implements Listener {
     public void onPlayerChat(PlayerCommandPreprocessEvent event){
         Player p = event.getPlayer();
         if(AdminBansAPI.isPlayerMuted(p.getUniqueId(), AdminBansAPI.server_name)){
-            if(adminBans.getConf().getStringList("mute_commands_restriction").contains(event.getMessage().substring(0, ' '))){
+            if(adminBans.getConf().getStringList("mute_commands_restriction").contains(event.getMessage().split(" ")[0])){
                 p.sendMessage(Message.getMessage(p.getUniqueId(), "mute_message"));
                 event.setCancelled(true);
             }
