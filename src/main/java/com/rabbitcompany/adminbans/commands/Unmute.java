@@ -31,7 +31,7 @@ public class Unmute implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if(player.hasPermission("admingui.unmute")){
+        if(player.hasPermission("adminbans.unmute")){
             if(args.length != 1){
                 player.sendMessage(Message.getMessage(player.getUniqueId(), "unmute_syntax"));
             }else{
