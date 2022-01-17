@@ -1,12 +1,7 @@
 package com.rabbitcompany.adminbans.utils;
 
-import com.rabbitcompany.adminbans.AdminBans;
 import com.rabbitcompany.adminbans.AdminBansAPI;
-
-import java.sql.*;
-import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
 
@@ -32,28 +27,11 @@ public class Utils {
     }
 
     public static String playerBannedMessage(UUID uuid){
-        if(AdminBansAPI.isPlayerBanned(uuid)){
-            String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
-            AtomicReference<String> reason = new AtomicReference<>("");
-            AtomicReference<Date> until = new AtomicReference<>(new Date(System.currentTimeMillis()));
-
-            try {
-                Connection conn = AdminBans.hikari.getConnection();
-                PreparedStatement ps = conn.prepareStatement(query);
-                ResultSet rs = ps.executeQuery();
-                if(rs.next()){
-                    until.set(rs.getTimestamp("until"));
-                    reason.set(rs.getString("reason"));
-                }
-                conn.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-
-            return banReasonMessage(uuid, reason.get(), AdminBansAPI.date_format.format(until.get()));
-        }else{
-            return "";
+        for(BannedPlayer bannedPlayer : AdminBansAPI.getBannedPlayers()){
+            if(bannedPlayer.uuid_to.equals(uuid.toString()))
+                return banReasonMessage(uuid, bannedPlayer.reason, AdminBansAPI.date_format.format(bannedPlayer.until));
         }
+        return "";
     }
 
     public static String stripNonDigits(final CharSequence input){

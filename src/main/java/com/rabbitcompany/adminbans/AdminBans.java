@@ -80,6 +80,9 @@ public final class AdminBans extends JavaPlugin {
         this.getCommand("banlist").setExecutor(new BanList());
         this.getCommand("mutelist").setExecutor(new MuteList());
 
+        AdminBansAPI.fetchBannedPlayersFromDatabase();
+        AdminBansAPI.fetchBannedIPsFromDatabase();
+        AdminBansAPI.fetchMutedPlayersFromDatabase();
     }
 
     @Override

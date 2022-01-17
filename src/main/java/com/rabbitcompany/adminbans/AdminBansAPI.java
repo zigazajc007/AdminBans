@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AdminBansAPI {
@@ -17,231 +16,77 @@ public class AdminBansAPI {
     public static String server_name = AdminBans.getInstance().getConf().getString("server_name");
     public static SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static ArrayList<BannedPlayer> bannedPlayers = new ArrayList<>();
+    private static ArrayList<BannedIP> bannedIPs = new ArrayList<>();
+    private static ArrayList<MutedPlayer> mutedPlayers = new ArrayList<>();
+
     public static boolean isIPValid(final String ip) {
         String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
-
         return ip.matches(PATTERN);
     }
 
     public static boolean isPlayerBanned(String player){
-        String query = "SELECT * FROM adminbans_banned_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    isPlayerBanned.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(BannedPlayer bannedPlayer : getBannedPlayers()){
+            if(bannedPlayer.username_to.equals(player)) return true;
         }
-
-        return isPlayerBanned.get();
+        return false;
     }
 
     public static boolean isPlayerBanned(String player, String server){
-        String query = "SELECT * FROM adminbans_banned_players WHERE username_to = '" + player + "' AND server = '" + server + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    isPlayerBanned.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(BannedPlayer bannedPlayer : getBannedPlayers(server)){
+            if(bannedPlayer.username_to.equals(player)) return true;
         }
-
-        return isPlayerBanned.get();
+        return false;
     }
 
     public static boolean isPlayerBanned(UUID uuid){
-        String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    isPlayerBanned.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(BannedPlayer bannedPlayer : getBannedPlayers()){
+            if(bannedPlayer.uuid_to.equals(uuid.toString())) return true;
         }
-
-        return isPlayerBanned.get();
+        return false;
     }
 
     public static boolean isPlayerBanned(UUID uuid, String server){
-        String query = "SELECT * FROM adminbans_banned_players WHERE uuid_to = '" + uuid.toString() + "' AND server = '" + server + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    isPlayerBanned.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(BannedPlayer bannedPlayer : getBannedPlayers(server)){
+            if(bannedPlayer.uuid_to.equals(uuid.toString())) return true;
         }
-
-        return isPlayerBanned.get();
+        return false;
     }
 
     public static boolean isIPBanned(String ip){
-        String query = "SELECT * FROM adminbans_banned_ips WHERE ip = '" + ip + "';";
-        AtomicBoolean isIPBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                isIPBanned.set(true);
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return isIPBanned.get();
+        return getBannedIPs().contains(new BannedIP(ip, "Global"));
     }
 
     public static boolean isIPBanned(String ip, String server){
-        String query = "SELECT * FROM adminbans_banned_ips WHERE ip = '" + ip + "' AND server = '" + server + "';";
-        AtomicBoolean isIPBanned = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                isIPBanned.set(true);
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return isIPBanned.get();
+        return getBannedIPs(server).contains(new BannedIP(ip, server));
     }
 
     public static boolean isPlayerMuted(String player){
-        String query = "SELECT * FROM adminbans_muted_players WHERE username_to = '" + player + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    isPlayerMuted.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(MutedPlayer mutedPlayer : getMutedPlayers()){
+            if(mutedPlayer.username_to.equals(player)) return true;
         }
-        return isPlayerMuted.get();
+        return false;
     }
 
     public static boolean isPlayerMuted(String player, String server){
-        String query = "SELECT * FROM adminbans_muted_players WHERE username_to = '" + player + "' AND server = '" + server + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    isPlayerMuted.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(MutedPlayer mutedPlayer : getMutedPlayers(server)){
+            if(mutedPlayer.username_to.equals(player)) return true;
         }
-
-        return isPlayerMuted.get();
+        return false;
     }
 
     public static boolean isPlayerMuted(UUID uuid){
-        String query = "SELECT * FROM adminbans_muted_players WHERE uuid_to = '" + uuid + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    isPlayerMuted.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(MutedPlayer mutedPlayer : getMutedPlayers()){
+            if(mutedPlayer.uuid_to.equals(uuid.toString())) return true;
         }
-
-        return isPlayerMuted.get();
+        return false;
     }
 
     public static boolean isPlayerMuted(UUID uuid, String server){
-        String query = "SELECT * FROM adminbans_muted_players WHERE uuid_to = '" + uuid + "' AND server = '" + server + "' ORDER BY until DESC;";
-        AtomicBoolean isPlayerMuted = new AtomicBoolean(false);
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    isPlayerMuted.set(true);
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        for(MutedPlayer mutedPlayer : getMutedPlayers(server)){
+            if(mutedPlayer.uuid_to.equals(uuid.toString())) return true;
         }
-
-        return isPlayerMuted.get();
+        return false;
     }
 
     public static String banPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, String until){
@@ -513,138 +358,117 @@ public class AdminBansAPI {
     }
 
     public static ArrayList<BannedPlayer> getBannedPlayers(){
-        ArrayList<BannedPlayer> banned_players = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_banned_players ORDER BY until DESC;";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    banned_players.add(new BannedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        ArrayList<BannedPlayer> tempBannedPlayers = new ArrayList<>();
+        for(BannedPlayer bannedPlayer : bannedPlayers){
+            if(new Date(System.currentTimeMillis()).before(bannedPlayer.until) || bannedPlayer.until.getTime() == Long.MAX_VALUE) tempBannedPlayers.add(bannedPlayer);
         }
-
-        return banned_players;
+        return tempBannedPlayers;
     }
 
     public static ArrayList<BannedPlayer> getBannedPlayers(String server){
-        ArrayList<BannedPlayer> banned_players = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_banned_players WHERE server = '" + server + "' ORDER BY until DESC;";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until) || until.getTime() == Long.MAX_VALUE){
-                    banned_players.add(new BannedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        ArrayList<BannedPlayer> tempBannedPlayers = new ArrayList<>();
+        for(BannedPlayer bannedPlayer : bannedPlayers){
+            if((new Date(System.currentTimeMillis()).before(bannedPlayer.until) || bannedPlayer.until.getTime() == Long.MAX_VALUE) && bannedPlayer.server.equals(server)) tempBannedPlayers.add(bannedPlayer);
         }
-
-        return banned_players;
+        return tempBannedPlayers;
     }
 
     public static ArrayList<BannedIP> getBannedIPs(){
-        ArrayList<BannedIP> banned_ips = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_banned_ips;";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return banned_ips;
+        return bannedIPs;
     }
 
     public static ArrayList<BannedIP> getBannedIPs(String server){
-        ArrayList<BannedIP> banned_ips = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_banned_ips WHERE server = '" + server + "';";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                banned_ips.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        ArrayList<BannedIP> tempBannedIPs = new ArrayList<>();
+        for(BannedIP bannedIP : bannedIPs){
+            if(bannedIP.server.equals(server)) tempBannedIPs.add(bannedIP);
         }
-
-        return banned_ips;
+        return tempBannedIPs;
     }
 
     public static ArrayList<MutedPlayer> getMutedPlayers(){
-        ArrayList<MutedPlayer> mutedPlayers = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_muted_players ORDER BY until DESC;";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    mutedPlayers.add(new MutedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        ArrayList<MutedPlayer> tempMutedPlayers = new ArrayList<>();
+        for (MutedPlayer mutedPlayer : mutedPlayers) {
+            if(new Date(System.currentTimeMillis()).before(mutedPlayer.until)) tempMutedPlayers.add(mutedPlayer);
         }
-
-        return mutedPlayers;
+        return tempMutedPlayers;
     }
 
     public static ArrayList<MutedPlayer> getMutedPlayers(String server){
-        ArrayList<MutedPlayer> mutedPlayers = new ArrayList<>();
-
-        String query = "SELECT * FROM adminbans_muted_players WHERE server = '" + server + "' ORDER BY until DESC;";
-
-        try {
-            Connection conn = AdminBans.hikari.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Timestamp until = rs.getTimestamp("until");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(now.before(until)){
-                    mutedPlayers.add(new MutedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
-                }
-            }
-            conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        ArrayList<MutedPlayer> tempMutedPlayers = new ArrayList<>();
+        for (MutedPlayer mutedPlayer : mutedPlayers) {
+            if(new Date(System.currentTimeMillis()).before(mutedPlayer.until) && mutedPlayer.server.equals(server)) tempMutedPlayers.add(mutedPlayer);
         }
+        return tempMutedPlayers;
+    }
 
-        return mutedPlayers;
+    protected static void fetchBannedPlayersFromDatabase(){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AdminBans.getInstance(), () -> {
+            ArrayList<BannedPlayer> tempBannedPlayers = new ArrayList<>();
+            String query = "SELECT * FROM adminbans_banned_players ORDER BY until DESC;";
+
+            try {
+                Connection conn = AdminBans.hikari.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    Timestamp until = rs.getTimestamp("until");
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    if(now.before(until) || until.getTime() == Long.MAX_VALUE){
+                        tempBannedPlayers.add(new BannedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
+                    }
+                }
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            bannedPlayers = tempBannedPlayers;
+        }, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_banned_players", 15));
+    }
+
+    protected static void fetchBannedIPsFromDatabase(){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AdminBans.getInstance(), () -> {
+            ArrayList<BannedIP> tempBannedIPs = new ArrayList<>();
+            String query = "SELECT * FROM adminbans_banned_ips;";
+
+            try {
+                Connection conn = AdminBans.hikari.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    tempBannedIPs.add(new BannedIP(rs.getString("ip"), rs.getString("server")));
+                }
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            bannedIPs = tempBannedIPs;
+        }, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_banned_ips", 15));
+    }
+
+    protected static void fetchMutedPlayersFromDatabase(){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AdminBans.getInstance(), () -> {
+            ArrayList<MutedPlayer> tempMutedPlayers = new ArrayList<>();
+            String query = "SELECT * FROM adminbans_muted_players ORDER BY until DESC;";
+
+            try {
+                Connection conn = AdminBans.hikari.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    Timestamp until = rs.getTimestamp("until");
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    if(now.before(until)){
+                        tempMutedPlayers.add(new MutedPlayer(rs.getString("uuid_from"), rs.getString("username_from"), rs.getString("uuid_to"), rs.getString("username_to"), rs.getString("reason"), rs.getTimestamp("until"), rs.getString("server"), rs.getTimestamp("created")));
+                    }
+                }
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            mutedPlayers = tempMutedPlayers;
+        }, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_muted_players", 15));
     }
 }
