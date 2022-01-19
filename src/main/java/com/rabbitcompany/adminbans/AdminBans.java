@@ -101,9 +101,9 @@ public final class AdminBans extends JavaPlugin {
         try {
             hikari = new HikariDataSource();
             hikari.setMaximumPoolSize(10);
-            hikari.setJdbcUrl("jdbc:mysql://" + getConf().getString("mysql_host") + ":" + getConf().getString("mysql_port") + "/" + getConf().getString("mysql_database"));
-            hikari.setUsername(getConf().getString("mysql_user"));
-            hikari.setPassword(getConf().getString("mysql_password"));
+            hikari.setJdbcUrl("jdbc:mysql://" + getConf().getString("mysql_host", "localhost") + ":" + getConf().getString("mysql_port", "3306") + "/" + getConf().getString("mysql_database", "AdminBans"));
+            hikari.setUsername(getConf().getString("mysql_user", "root"));
+            hikari.setPassword(getConf().getString("mysql_password", ""));
             hikari.addDataSourceProperty("useSSL", getConf().getString("mysql_useSSL"));
             hikari.addDataSourceProperty("cachePrepStmts", "true");
             hikari.addDataSourceProperty("prepStmtCacheSize", "250");
