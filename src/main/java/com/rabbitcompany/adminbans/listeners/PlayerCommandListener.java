@@ -12,22 +12,22 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class PlayerCommandListener implements Listener {
 
-    private AdminBans adminBans;
+	private AdminBans adminBans;
 
-    public PlayerCommandListener(AdminBans plugin){
-        adminBans = plugin;
+	public PlayerCommandListener(AdminBans plugin){
+		adminBans = plugin;
 
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-    }
+		Bukkit.getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(PlayerCommandPreprocessEvent event){
-        Player p = event.getPlayer();
-        if(AdminBansAPI.isPlayerMuted(p.getUniqueId(), AdminBansAPI.server_name)){
-            if(adminBans.getConf().getStringList("mute_commands_restriction").contains(event.getMessage().split(" ")[0])){
-                p.sendMessage(Message.getMessage(p.getUniqueId(), "mute_message"));
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerChat(PlayerCommandPreprocessEvent event){
+		Player p = event.getPlayer();
+		if(AdminBansAPI.isPlayerMuted(p.getUniqueId(), AdminBansAPI.server_name)){
+			if(adminBans.getConf().getStringList("mute_commands_restriction").contains(event.getMessage().split(" ")[0])){
+				p.sendMessage(Message.getMessage(p.getUniqueId(), "mute_message"));
+				event.setCancelled(true);
+			}
+		}
+	}
 }

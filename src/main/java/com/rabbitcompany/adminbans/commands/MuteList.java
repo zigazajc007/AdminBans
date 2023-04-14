@@ -13,30 +13,30 @@ import java.util.UUID;
 
 public class MuteList implements CommandExecutor {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player)) {
-            ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
-            sender.sendMessage(Message.getMessage(UUID.randomUUID(), "muted_players"));
-            for (MutedPlayer mutedPlayer : mutedPlayers) {
-                sender.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
-            }
-            return true;
-        }
+		if(!(sender instanceof Player)) {
+			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "muted_players"));
+			for (MutedPlayer mutedPlayer : mutedPlayers) {
+				sender.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
+			}
+			return true;
+		}
 
-        Player player = (Player) sender;
+		Player player = (Player) sender;
 
-        if(player.hasPermission("adminbans.mutelist")){
-            ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
-            player.sendMessage(Message.getMessage(player.getUniqueId(), "muted_players"));
-            for (MutedPlayer mutedPlayer : mutedPlayers) {
-                player.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
-            }
-        }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
-        }
+		if(player.hasPermission("adminbans.mutelist")){
+			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "muted_players"));
+			for (MutedPlayer mutedPlayer : mutedPlayers) {
+				player.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
+			}
+		}else{
+			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		}
 
-        return true;
-    }
+		return true;
+	}
 }

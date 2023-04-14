@@ -13,30 +13,30 @@ import java.util.UUID;
 
 public class BanList implements CommandExecutor {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player)) {
-            ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
-            sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banned_players"));
-            for (BannedPlayer bannedPlayer : bannedPlayers) {
-                sender.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
-            }
-            return true;
-        }
+		if(!(sender instanceof Player)) {
+			ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banned_players"));
+			for (BannedPlayer bannedPlayer : bannedPlayers) {
+				sender.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
+			}
+			return true;
+		}
 
-        Player player = (Player) sender;
+		Player player = (Player) sender;
 
-        if(player.hasPermission("adminbans.banlist")){
-            ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
-            player.sendMessage(Message.getMessage(player.getUniqueId(), "banned_players"));
-            for (BannedPlayer bannedPlayer : bannedPlayers) {
-                player.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
-            }
-        }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
-        }
+		if(player.hasPermission("adminbans.banlist")){
+			ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "banned_players"));
+			for (BannedPlayer bannedPlayer : bannedPlayers) {
+				player.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
+			}
+		}else{
+			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		}
 
-        return true;
-    }
+		return true;
+	}
 }

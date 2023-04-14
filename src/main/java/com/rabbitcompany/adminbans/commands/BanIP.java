@@ -10,41 +10,41 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class BanIP implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player)) {
-            if(args.length == 1){
-                String ip = args[0];
-                if(AdminBansAPI.isIPValid(ip)){
-                    sender.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-                }else{
-                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
-                }
-            }else{
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banip_syntax"));
-            }
-            return true;
-        }
+		if(!(sender instanceof Player)) {
+			if(args.length == 1){
+				String ip = args[0];
+				if(AdminBansAPI.isIPValid(ip)){
+					sender.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
+				}else{
+					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
+				}
+			}else{
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banip_syntax"));
+			}
+			return true;
+		}
 
-        Player player = (Player) sender;
+		Player player = (Player) sender;
 
-        if(player.hasPermission("adminbans.banip")){
-            if(args.length == 1){
-                String ip = args[0];
-                if(AdminBansAPI.isIPValid(ip)){
-                    player.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-                }else{
-                    player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
-                }
-            }else{
-                player.sendMessage(Message.getMessage(player.getUniqueId(), "banip_syntax"));
-            }
-        }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
-        }
+		if(player.hasPermission("adminbans.banip")){
+			if(args.length == 1){
+				String ip = args[0];
+				if(AdminBansAPI.isIPValid(ip)){
+					player.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
+				}else{
+					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
+				}
+			}else{
+				player.sendMessage(Message.getMessage(player.getUniqueId(), "banip_syntax"));
+			}
+		}else{
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 }

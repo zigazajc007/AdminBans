@@ -12,67 +12,67 @@ import java.util.UUID;
 
 public class Kick implements CommandExecutor {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player)) {
-            if(args.length < 2){
-                sender.sendMessage(Message.getMessage(UUID.randomUUID(), "kick_syntax"));
-            }else{
-                Player target = Bukkit.getPlayer(args[0]);
-                if(target != null){
-                    if(target.isOnline()) {
+		if(!(sender instanceof Player)) {
+			if(args.length < 2){
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "kick_syntax"));
+			}else{
+				Player target = Bukkit.getPlayer(args[0]);
+				if(target != null){
+					if(target.isOnline()) {
 
-                        StringBuilder message = new StringBuilder();
+						StringBuilder message = new StringBuilder();
 
-                        for (int i = 1; i < args.length; i++){
-                            message.append(args[i]).append(" ");
-                        }
+						for (int i = 1; i < args.length; i++){
+							message.append(args[i]).append(" ");
+						}
 
-                        sender.sendMessage(AdminBansAPI.kickPlayer("Console", "Console", target.getUniqueId().toString(), target.getName(), message.toString()));
-                    }else{
-                        sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_online").replace("{player}", target.getName()));
-                    }
-                }else{
-                    sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_a_player").replace("{player}", args[0]));
-                }
-            }
-            return true;
-        }
+						sender.sendMessage(AdminBansAPI.kickPlayer("Console", "Console", target.getUniqueId().toString(), target.getName(), message.toString()));
+					}else{
+						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_online").replace("{player}", target.getName()));
+					}
+				}else{
+					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_a_player").replace("{player}", args[0]));
+				}
+			}
+			return true;
+		}
 
-        Player player = (Player) sender;
+		Player player = (Player) sender;
 
-        if(player.hasPermission("adminbans.kick")){
-            if(args.length < 2){
-                player.sendMessage(Message.getMessage(player.getUniqueId(), "kick_syntax"));
-            }else{
-                Player target = Bukkit.getPlayer(args[0]);
-                if(target != null){
+		if(player.hasPermission("adminbans.kick")){
+			if(args.length < 2){
+				player.sendMessage(Message.getMessage(player.getUniqueId(), "kick_syntax"));
+			}else{
+				Player target = Bukkit.getPlayer(args[0]);
+				if(target != null){
 
-                    if(target.hasPermission("adminbans.kick.exempt")){
-                        player.sendMessage(Message.getMessage(player.getUniqueId(), "player_kick_exempt").replace("{player}", target.getName()));
-                        return true;
-                    }
+					if(target.hasPermission("adminbans.kick.exempt")){
+						player.sendMessage(Message.getMessage(player.getUniqueId(), "player_kick_exempt").replace("{player}", target.getName()));
+						return true;
+					}
 
-                    if(target.isOnline()) {
-                        StringBuilder message = new StringBuilder();
+					if(target.isOnline()) {
+						StringBuilder message = new StringBuilder();
 
-                        for (int i = 1; i < args.length; i++){
-                            message.append(args[i]).append(" ");
-                        }
-                        
-                        player.sendMessage(AdminBansAPI.kickPlayer(player.getUniqueId().toString(), player.getName(), target.getUniqueId().toString(), target.getName(), message.toString()));
-                    }else{
-                        player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_online").replace("{player}", target.getName()));
-                    }
-                }else{
-                    player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_player").replace("{player}", args[0]));
-                }
-            }
-        }else{
-            player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
-        }
+						for (int i = 1; i < args.length; i++){
+							message.append(args[i]).append(" ");
+						}
 
-        return true;
-    }
+						player.sendMessage(AdminBansAPI.kickPlayer(player.getUniqueId().toString(), player.getName(), target.getUniqueId().toString(), target.getName(), message.toString()));
+					}else{
+						player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_online").replace("{player}", target.getName()));
+					}
+				}else{
+					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_player").replace("{player}", args[0]));
+				}
+			}
+		}else{
+			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		}
+
+		return true;
+	}
 }

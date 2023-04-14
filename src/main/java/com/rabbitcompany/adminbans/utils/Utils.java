@@ -5,44 +5,44 @@ import java.util.UUID;
 
 public class Utils {
 
-    public static String banReasonMessage(UUID target, String reason, String time){
-        String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
-        if(time.equals("9999-12-31 23:59:59")){
-            if(reason == null || reason.equals("null")){
-                return bumper + Message.getMessage(target, "ban_message_perm_no_reason") + bumper;
-            }else{
-                return bumper + Message.getMessage(target, "ban_message_perm").replace("{reason}", reason) + bumper;
-            }
-        }else if(reason == null || reason.equals("null")){
-            return bumper + Message.getMessage(target, "ban_message_no_reason").replace("{time}", time) + bumper;
-        }else{
-            return bumper + Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time) + bumper;
-        }
-    }
+	public static String banReasonMessage(UUID target, String reason, String time){
+		String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
+		if(time.equals("9999-12-31 23:59:59")){
+			if(reason == null || reason.equals("null")){
+				return bumper + Message.getMessage(target, "ban_message_perm_no_reason") + bumper;
+			}else{
+				return bumper + Message.getMessage(target, "ban_message_perm").replace("{reason}", reason) + bumper;
+			}
+		}else if(reason == null || reason.equals("null")){
+			return bumper + Message.getMessage(target, "ban_message_no_reason").replace("{time}", time) + bumper;
+		}else{
+			return bumper + Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time) + bumper;
+		}
+	}
 
-    public static String banIPMessage(){
-        String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
+	public static String banIPMessage(){
+		String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
 
-        return bumper + Message.getMessage(UUID.randomUUID(), "ip_ban_message") + bumper;
-    }
+		return bumper + Message.getMessage(UUID.randomUUID(), "ip_ban_message") + bumper;
+	}
 
-    public static String playerBannedMessage(UUID uuid){
-        for(BannedPlayer bannedPlayer : AdminBansAPI.getBannedPlayers()){
-            if(bannedPlayer.uuid_to.equals(uuid.toString()))
-                return banReasonMessage(uuid, bannedPlayer.reason, AdminBansAPI.date_format.format(bannedPlayer.until));
-        }
-        return "";
-    }
+	public static String playerBannedMessage(UUID uuid){
+		for(BannedPlayer bannedPlayer : AdminBansAPI.getBannedPlayers()){
+			if(bannedPlayer.uuid_to.equals(uuid.toString()))
+				return banReasonMessage(uuid, bannedPlayer.reason, AdminBansAPI.date_format.format(bannedPlayer.until));
+		}
+		return "";
+	}
 
-    public static String stripNonDigits(final CharSequence input){
-        final StringBuilder sb = new StringBuilder(input.length());
-        for(int i = 0; i < input.length(); i++){
-            final char c = input.charAt(i);
-            if(c > 47 && c < 58){
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
+	public static String stripNonDigits(final CharSequence input){
+		final StringBuilder sb = new StringBuilder(input.length());
+		for(int i = 0; i < input.length(); i++){
+			final char c = input.charAt(i);
+			if(c > 47 && c < 58){
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
 
 }
