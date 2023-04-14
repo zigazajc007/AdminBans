@@ -46,6 +46,9 @@ public final class AdminBans extends JavaPlugin {
 
 		info("&aEnabling");
 
+		//bStats
+		Metrics metrics = new Metrics(this, 18209);
+
 		//Database connection
 		if(getConf().getBoolean("mysql", false)){
 			setupMySQL();
