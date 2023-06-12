@@ -1,5 +1,6 @@
 package com.rabbitcompany.adminbans.commands;
 
+import com.rabbitcompany.adminbans.AdminBans;
 import com.rabbitcompany.adminbans.AdminBansAPI;
 import com.rabbitcompany.adminbans.utils.Message;
 import org.bukkit.Bukkit;
@@ -14,6 +15,11 @@ public class Kick implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("kick")){
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
+			return true;
+		}
 
 		if(!(sender instanceof Player)) {
 			if(args.length < 2){

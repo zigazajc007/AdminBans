@@ -1,5 +1,6 @@
 package com.rabbitcompany.adminbans.commands;
 
+import com.rabbitcompany.adminbans.AdminBans;
 import com.rabbitcompany.adminbans.AdminBansAPI;
 import com.rabbitcompany.adminbans.utils.Message;
 import com.rabbitcompany.adminbans.utils.MutedPlayer;
@@ -15,6 +16,11 @@ public class MuteList implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("mutelist")){
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
+			return true;
+		}
 
 		if(!(sender instanceof Player)) {
 			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();

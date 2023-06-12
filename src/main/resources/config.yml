@@ -76,6 +76,20 @@ times:
 mute_commands_restriction:
   - "/msg"
 #----------------------------------------------------------
+#             Disable Commands
+#----------------------------------------------------------
+disabled_commands:
+#  - ban
+#  - banip
+#  - banlist
+#  - unban
+#  - unbanip
+#  - kick
+#  - mute
+#  - mutelist
+#  - unmute
+#  - warn
+#----------------------------------------------------------
 #   MySQL Database - Must be used for Website Interface
 #----------------------------------------------------------
 # Do you want to use mysql database?
