@@ -20,6 +20,7 @@ public final class AdminBans extends JavaPlugin {
 
 	//Database
 	public static HikariDataSource hikari;
+	public static String new_version = null;
 	private static AdminBans instance;
 	private static Connection conn = null;
 	private final YamlConfiguration conf = new YamlConfiguration();
@@ -44,10 +45,17 @@ public final class AdminBans extends JavaPlugin {
 		mkdir();
 		loadYamls();
 
-		info("&aEnabling");
-
 		//bStats
 		Metrics metrics = new Metrics(this, 18209);
+		metrics.addCustomChart(new Metrics.SimplePie("mysql", () -> getConf().getString("mysql", "false")));
+
+		//Updater
+		new UpdateChecker(this, 726).getVersion(updater_version -> {
+			if (!getDescription().getVersion().equalsIgnoreCase(updater_version)) {
+				new_version = updater_version;
+			}
+			info("&aEnabling");
+		});
 
 		//Database connection
 		if (getConf().getBoolean("mysql", false)) {
@@ -188,30 +196,40 @@ public final class AdminBans extends JavaPlugin {
 	}
 
 	private void info(String message) {
-		Bukkit.getConsoleSender().sendMessage(Message.chat(""));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====[" + message + " &cAdminBans&6]=====[]"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cInformation:"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
+		String text = "\n\n";
+		text += "&8[]==========[" + message + " &cAdminBans&8]===========[]\n";
+		text += "&8|\n";
+		text += "&8| &cInformation:\n";
+		text += "&8|\n";
+		text += "&8|   &9Name: &bAdminBans\n";
+		text += "&8|   &9Developer: &bBlack1_TV\n";
 		if (!username.contains("%%__")) {
-			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
+			text += "&6|   &9Plugin owner: &b" + username + "\n";
 		} else if (!user_id.contains("%%__")) {
-			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + user_id));
+			text += "&6|   &9Plugin owner: &b" + user_id + "\n";
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &4&lCRACKED"));
+			text += "&6|   &9Plugin owner: &4&lCRACKED\n";
 		}
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b" + getDescription().getVersion()));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6| &cSupport:"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Discord: &bCrazy Rabbit#0001"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Mail: &bziga.zajc007@gmail.com"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Discord: &bhttps://discord.gg/hUNymXX"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====================================[]"));
-		Bukkit.getConsoleSender().sendMessage(Message.chat(""));
+		if (new_version != null) {
+			text += "&8|   &9Version: &b" + getDescription().getVersion() + " (&6update available&b)\n";
+		} else {
+			text += "&8|   &9Version: &b" + getDescription().getVersion() + "\n";
+		}
+		text += "&8|   &9Website: &bhttps://rabbit-company.com\n";
+		text += "&8|\n";
+		text += "&8| &cSponsors:\n";
+		text += "&8|\n";
+		text += "&8|   &9- &6https://rabbitserverlist.com\n";
+		text += "&8|\n";
+		text += "&8| &cSupport:\n";
+		text += "&8|\n";
+		text += "&8|   &9Discord: &bziga.zajc007\n";
+		text += "&8|   &9Mail: &bziga.zajc007@gmail.com\n";
+		text += "&8|   &9Discord: &bhttps://discord.gg/hUNymXX\n";
+		text += "&8|\n";
+		text += "&8[]=========================================[]\n";
+
+		Bukkit.getConsoleSender().sendMessage(Message.chat(text));
 	}
 
 }
