@@ -20,36 +20,40 @@ public class BanIP implements CommandExecutor {
 		}
 
 		if (!(sender instanceof Player)) {
-			if (args.length == 1) {
-				String ip = args[0];
-				if (AdminBansAPI.isIPValid(ip)) {
-					sender.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-				} else {
-					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
-				}
-			} else {
+			if (args.length != 1) {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banip_syntax"));
+				return true;
 			}
+
+			String ip = args[0];
+			if (!AdminBansAPI.isIPValid(ip)) {
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
+				return true;
+			}
+
+			sender.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
 			return true;
 		}
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans.banip")) {
-			if (args.length == 1) {
-				String ip = args[0];
-				if (AdminBansAPI.isIPValid(ip)) {
-					player.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-				} else {
-					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
-				}
-			} else {
-				player.sendMessage(Message.getMessage(player.getUniqueId(), "banip_syntax"));
-			}
-		} else {
+		if (!player.hasPermission("adminbans.banip")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
 		}
 
+		if (args.length != 1) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "banip_syntax"));
+			return true;
+		}
+
+		String ip = args[0];
+		if (!AdminBansAPI.isIPValid(ip)) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
+			return true;
+		}
+
+		player.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
 		return true;
 	}
 

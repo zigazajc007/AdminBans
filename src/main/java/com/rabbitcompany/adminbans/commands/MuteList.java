@@ -33,16 +33,16 @@ public class MuteList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans.mutelist")) {
-			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
-			player.sendMessage(Message.getMessage(player.getUniqueId(), "muted_players"));
-			for (MutedPlayer mutedPlayer : mutedPlayers) {
-				player.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
-			}
-		} else {
+		if (!player.hasPermission("adminbans.mutelist")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
 		}
 
+		ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
+		player.sendMessage(Message.getMessage(player.getUniqueId(), "muted_players"));
+		for (MutedPlayer mutedPlayer : mutedPlayers) {
+			player.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
+		}
 		return true;
 	}
 }

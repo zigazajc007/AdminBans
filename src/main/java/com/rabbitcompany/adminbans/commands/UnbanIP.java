@@ -21,44 +21,50 @@ public class UnbanIP implements CommandExecutor {
 		}
 
 		if (!(sender instanceof Player)) {
-			if (args.length == 1) {
-				String ip = args[0];
-				if (AdminBansAPI.isIPValid(ip)) {
-					if (AdminBansAPI.unBanIP(ip)) {
-						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "ip_unban").replace("{ip}", ip));
-					} else {
-						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unban_ip_error").replace("{ip}", ip));
-					}
-				} else {
-					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
-				}
-			} else {
+
+			if (args.length != 1) {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unbanip_syntax"));
+				return true;
 			}
+
+			String ip = args[0];
+			if (!AdminBansAPI.isIPValid(ip)) {
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
+				return true;
+			}
+
+			if (!AdminBansAPI.unBanIP(ip)) {
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unban_ip_error").replace("{ip}", ip));
+				return true;
+			}
+
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "ip_unban").replace("{ip}", ip));
 			return true;
 		}
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans.unbanip")) {
-			if (args.length == 1) {
-				String ip = args[0];
-				if (AdminBansAPI.isIPValid(ip)) {
-					if (AdminBansAPI.unBanIP(ip)) {
-						player.sendMessage(Message.getMessage(player.getUniqueId(), "ip_unban").replace("{ip}", ip));
-					} else {
-						player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_ip_error").replace("{ip}", ip));
-					}
-				} else {
-					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
-				}
-			} else {
-				player.sendMessage(Message.getMessage(player.getUniqueId(), "unbanip_syntax"));
-			}
-		} else {
+		if (!player.hasPermission("adminbans.unbanip")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
 		}
 
+		if (args.length != 1) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "unbanip_syntax"));
+			return true;
+		}
+
+		String ip = args[0];
+		if (!AdminBansAPI.isIPValid(ip)) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
+			return true;
+		}
+
+		if (!AdminBansAPI.unBanIP(ip)) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_ip_error").replace("{ip}", ip));
+		}
+
+		player.sendMessage(Message.getMessage(player.getUniqueId(), "ip_unban").replace("{ip}", ip));
 		return true;
 	}
 }

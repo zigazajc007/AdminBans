@@ -66,29 +66,27 @@ public class AdminBans implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans")) {
-			if (args.length == 1) {
-				switch (args[0]) {
-					case "help":
-						player.sendMessage(Message.getMessage(player.getUniqueId(), "commands"));
-						break;
-					case "reload":
-						if (player.hasPermission("adminbans.reload")) {
-							com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
-							player.sendMessage(Message.getMessage(player.getUniqueId(), "reload"));
-						} else {
-							player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
-						}
-						break;
-					default:
-						player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
-						break;
-				}
-			} else {
-				player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
-			}
-		} else {
+		if (!player.hasPermission("adminbans")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
+		}
+
+		if (args.length != 1) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
+			return true;
+		}
+
+		if (args[0].equals("help")) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "commands"));
+		} else if (args[0].equals("reload")) {
+			if (!player.hasPermission("adminbans.reload")) {
+				player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+				return true;
+			}
+			com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "reload"));
+		} else {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
 		}
 
 		return true;

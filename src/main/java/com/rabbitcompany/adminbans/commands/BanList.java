@@ -33,14 +33,15 @@ public class BanList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans.banlist")) {
-			ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
-			player.sendMessage(Message.getMessage(player.getUniqueId(), "banned_players"));
-			for (BannedPlayer bannedPlayer : bannedPlayers) {
-				player.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
-			}
-		} else {
+		if (!player.hasPermission("adminbans.banlist")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
+		}
+
+		ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
+		player.sendMessage(Message.getMessage(player.getUniqueId(), "banned_players"));
+		for (BannedPlayer bannedPlayer : bannedPlayers) {
+			player.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
 		}
 
 		return true;

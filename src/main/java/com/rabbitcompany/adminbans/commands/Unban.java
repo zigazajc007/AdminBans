@@ -21,38 +21,43 @@ public class Unban implements CommandExecutor {
 		}
 
 		if (!(sender instanceof Player)) {
+
 			if (args.length != 1) {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unban_syntax"));
-			} else {
-				String str_player = args[0];
-				if (AdminBansAPI.isPlayerBanned(str_player)) {
-					AdminBansAPI.unBanPlayer(str_player);
-					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "player_unban").replace("{player}", str_player));
-				} else {
-					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_banned").replace("{player}", str_player));
-				}
+				return true;
 			}
+
+			String str_player = args[0];
+			if (!AdminBansAPI.isPlayerBanned(str_player)) {
+				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_banned").replace("{player}", str_player));
+				return true;
+			}
+
+			AdminBansAPI.unBanPlayer(str_player);
+			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "player_unban").replace("{player}", str_player));
 			return true;
 		}
 
 		Player player = (Player) sender;
 
-		if (player.hasPermission("adminbans.unban")) {
-			if (args.length != 1) {
-				player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_syntax"));
-			} else {
-				String str_player = args[0];
-				if (AdminBansAPI.isPlayerBanned(str_player)) {
-					AdminBansAPI.unBanPlayer(str_player);
-					player.sendMessage(Message.getMessage(player.getUniqueId(), "player_unban").replace("{player}", str_player));
-				} else {
-					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_banned").replace("{player}", str_player));
-				}
-			}
-		} else {
+		if (!player.hasPermission("adminbans.unban")) {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
+			return true;
 		}
 
+		if (args.length != 1) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_syntax"));
+			return true;
+		}
+
+		String str_player = args[0];
+		if (!AdminBansAPI.isPlayerBanned(str_player)) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_banned").replace("{player}", str_player));
+			return true;
+		}
+
+		AdminBansAPI.unBanPlayer(str_player);
+		player.sendMessage(Message.getMessage(player.getUniqueId(), "player_unban").replace("{player}", str_player));
 		return true;
 	}
 }
