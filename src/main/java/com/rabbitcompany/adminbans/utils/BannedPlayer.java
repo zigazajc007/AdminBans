@@ -13,7 +13,7 @@ public class BannedPlayer {
 	public String server;
 	public Date created;
 
-	public BannedPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, Date until, String server, Date created){
+	public BannedPlayer(String uuid_from, String username_from, String uuid_to, String username_to, String reason, Date until, String server, Date created) {
 		this.uuid_from = uuid_from;
 		this.username_from = username_from;
 		this.uuid_to = uuid_to;

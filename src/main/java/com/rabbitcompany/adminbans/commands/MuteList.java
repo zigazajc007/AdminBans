@@ -17,12 +17,12 @@ public class MuteList implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("mutelist")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("mutelist")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
+		if (!(sender instanceof Player)) {
 			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "muted_players"));
 			for (MutedPlayer mutedPlayer : mutedPlayers) {
@@ -33,14 +33,14 @@ public class MuteList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.mutelist")){
+		if (player.hasPermission("adminbans.mutelist")) {
 			ArrayList<MutedPlayer> mutedPlayers = AdminBansAPI.getMutedPlayers();
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "muted_players"));
 			for (MutedPlayer mutedPlayer : mutedPlayers) {
 				player.sendMessage(Message.chat("&a- &c" + mutedPlayer.username_to));
 			}
-		}else{
-			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		} else {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 
 		return true;

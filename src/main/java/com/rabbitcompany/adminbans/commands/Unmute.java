@@ -15,20 +15,20 @@ public class Unmute implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unmute")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unmute")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
-			if(args.length != 1){
+		if (!(sender instanceof Player)) {
+			if (args.length != 1) {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unmute_syntax"));
-			}else{
+			} else {
 				String str_player = args[0];
-				if(AdminBansAPI.isPlayerMuted(str_player)){
+				if (AdminBansAPI.isPlayerMuted(str_player)) {
 					AdminBansAPI.unMutePlayer(str_player);
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "player_unmute").replace("{player}", str_player));
-				}else{
+				} else {
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_muted").replace("{player}", str_player));
 				}
 			}
@@ -37,19 +37,19 @@ public class Unmute implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.unmute")){
-			if(args.length != 1){
+		if (player.hasPermission("adminbans.unmute")) {
+			if (args.length != 1) {
 				player.sendMessage(Message.getMessage(player.getUniqueId(), "unmute_syntax"));
-			}else{
+			} else {
 				String str_player = args[0];
-				if(AdminBansAPI.isPlayerMuted(str_player)){
+				if (AdminBansAPI.isPlayerMuted(str_player)) {
 					AdminBansAPI.unMutePlayer(str_player);
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "player_unmute").replace("{player}", str_player));
-				}else{
+				} else {
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_muted").replace("{player}", str_player));
 				}
 			}
-		}else{
+		} else {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 

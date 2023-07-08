@@ -16,10 +16,10 @@ public class TabCompletion implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if(command.getName().equalsIgnoreCase("unban")){
+		if (command.getName().equalsIgnoreCase("unban")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 				ArrayList<BannedPlayer> bp = AdminBansAPI.getBannedPlayers();
 
 				for (BannedPlayer bannedPlayer : bp) {
@@ -27,23 +27,23 @@ public class TabCompletion implements TabCompleter {
 				}
 			}
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("ban")){
+		} else if (command.getName().equalsIgnoreCase("ban")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 
-				for(Player all : Bukkit.getServer().getOnlinePlayers()) {
+				for (Player all : Bukkit.getServer().getOnlinePlayers()) {
 					completions.add(all.getName());
 				}
 
-			}else if(args.length == 2){
+			} else if (args.length == 2) {
 
 				List<?> times = AdminBans.getInstance().getConf().getList("times");
-				if(times != null){
-					for (Object time: times) {
+				if (times != null) {
+					for (Object time : times) {
 						completions.add(time.toString());
 					}
-				}else{
+				} else {
 					//Minutes
 					completions.add("15min");
 					completions.add("30min");
@@ -68,13 +68,13 @@ public class TabCompletion implements TabCompleter {
 					completions.add("3y");
 					completions.add("10y");
 				}
-			}else if(args.length == 3){
+			} else if (args.length == 3) {
 				List<?> reasons = AdminBans.getInstance().getConf().getList("reasons");
-				if(reasons != null){
-					for (Object reason: reasons) {
+				if (reasons != null) {
+					for (Object reason : reasons) {
 						completions.add(reason.toString());
 					}
-				}else{
+				} else {
 					completions.add("Advertising");
 					completions.add("Hacking");
 					completions.add("Swearing");
@@ -84,7 +84,7 @@ public class TabCompletion implements TabCompleter {
 			}
 
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("kick") || command.getName().equalsIgnoreCase("warn")) {
+		} else if (command.getName().equalsIgnoreCase("kick") || command.getName().equalsIgnoreCase("warn")) {
 			List<String> completions = new ArrayList<>();
 
 			if (args.length == 1) {
@@ -95,11 +95,11 @@ public class TabCompletion implements TabCompleter {
 
 			} else if (args.length == 2) {
 				List<?> reasons = AdminBans.getInstance().getConf().getList("reasons");
-				if(reasons != null){
-					for (Object reason: reasons) {
+				if (reasons != null) {
+					for (Object reason : reasons) {
 						completions.add(reason.toString());
 					}
-				}else{
+				} else {
 					completions.add("Advertising");
 					completions.add("Hacking");
 					completions.add("Swearing");
@@ -109,23 +109,23 @@ public class TabCompletion implements TabCompleter {
 			}
 
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("mute")){
+		} else if (command.getName().equalsIgnoreCase("mute")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 
-				for(Player all : Bukkit.getServer().getOnlinePlayers()) {
+				for (Player all : Bukkit.getServer().getOnlinePlayers()) {
 					completions.add(all.getName());
 				}
 
-			}else if(args.length == 2){
+			} else if (args.length == 2) {
 
 				List<?> times = AdminBans.getInstance().getConf().getList("times");
-				if(times != null){
-					for (Object time: times) {
+				if (times != null) {
+					for (Object time : times) {
 						completions.add(time.toString());
 					}
-				}else{
+				} else {
 					//Minutes
 					completions.add("15min");
 					completions.add("30min");
@@ -151,13 +151,13 @@ public class TabCompletion implements TabCompleter {
 					completions.add("10y");
 				}
 
-			}else if(args.length == 3){
+			} else if (args.length == 3) {
 				List<?> reasons = AdminBans.getInstance().getConf().getList("reasons");
-				if(reasons != null){
-					for (Object reason: reasons) {
+				if (reasons != null) {
+					for (Object reason : reasons) {
 						completions.add(reason.toString());
 					}
-				}else{
+				} else {
 					completions.add("Advertising");
 					completions.add("Hacking");
 					completions.add("Swearing");
@@ -167,10 +167,10 @@ public class TabCompletion implements TabCompleter {
 			}
 
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("unmute")){
+		} else if (command.getName().equalsIgnoreCase("unmute")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 				ArrayList<MutedPlayer> bp = AdminBansAPI.getMutedPlayers();
 
 				for (MutedPlayer mutedPlayers : bp) {
@@ -178,10 +178,10 @@ public class TabCompletion implements TabCompleter {
 				}
 			}
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("unbanip")){
+		} else if (command.getName().equalsIgnoreCase("unbanip")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 				ArrayList<BannedIP> bp = AdminBansAPI.getBannedIPs();
 
 				for (BannedIP bannedIP : bp) {
@@ -189,10 +189,10 @@ public class TabCompletion implements TabCompleter {
 				}
 			}
 			return completions;
-		}else if(command.getName().equalsIgnoreCase("adminbans") || command.getName().equalsIgnoreCase("abans") || command.getName().equalsIgnoreCase("ab")){
+		} else if (command.getName().equalsIgnoreCase("adminbans") || command.getName().equalsIgnoreCase("abans") || command.getName().equalsIgnoreCase("ab")) {
 			List<String> completions = new ArrayList<>();
 
-			if(args.length == 1){
+			if (args.length == 1) {
 				completions.add("help");
 				completions.add("reload");
 			}

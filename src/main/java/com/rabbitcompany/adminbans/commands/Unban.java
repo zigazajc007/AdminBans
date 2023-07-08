@@ -15,20 +15,20 @@ public class Unban implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unban")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unban")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
-			if(args.length != 1){
+		if (!(sender instanceof Player)) {
+			if (args.length != 1) {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unban_syntax"));
-			}else{
+			} else {
 				String str_player = args[0];
-				if(AdminBansAPI.isPlayerBanned(str_player)){
+				if (AdminBansAPI.isPlayerBanned(str_player)) {
 					AdminBansAPI.unBanPlayer(str_player);
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "player_unban").replace("{player}", str_player));
-				}else{
+				} else {
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_banned").replace("{player}", str_player));
 				}
 			}
@@ -37,19 +37,19 @@ public class Unban implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.unban")){
-			if(args.length != 1){
+		if (player.hasPermission("adminbans.unban")) {
+			if (args.length != 1) {
 				player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_syntax"));
-			}else{
+			} else {
 				String str_player = args[0];
-				if(AdminBansAPI.isPlayerBanned(str_player)){
+				if (AdminBansAPI.isPlayerBanned(str_player)) {
 					AdminBansAPI.unBanPlayer(str_player);
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "player_unban").replace("{player}", str_player));
-				}else{
+				} else {
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_banned").replace("{player}", str_player));
 				}
 			}
-		}else{
+		} else {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 

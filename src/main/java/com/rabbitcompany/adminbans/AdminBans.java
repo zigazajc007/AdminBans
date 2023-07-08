@@ -18,22 +18,22 @@ import java.sql.SQLException;
 
 public final class AdminBans extends JavaPlugin {
 
-	private static AdminBans instance;
-
-	String username = "%%__USERNAME__%%";
-	String user_id = "%%__USER__%%";
-
 	//Database
 	public static HikariDataSource hikari;
+	private static AdminBans instance;
 	private static Connection conn = null;
-
+	private final YamlConfiguration conf = new YamlConfiguration();
+	private final YamlConfiguration mess = new YamlConfiguration();
+	String username = "%%__USERNAME__%%";
+	String user_id = "%%__USER__%%";
 	//Config
 	private File co = null;
-	private final YamlConfiguration conf = new YamlConfiguration();
-
 	//Messages
 	private File me = null;
-	private final YamlConfiguration mess = new YamlConfiguration();
+
+	public static AdminBans getInstance() {
+		return instance;
+	}
 
 	@Override
 	public void onEnable() {
@@ -50,9 +50,9 @@ public final class AdminBans extends JavaPlugin {
 		Metrics metrics = new Metrics(this, 18209);
 
 		//Database connection
-		if(getConf().getBoolean("mysql", false)){
+		if (getConf().getBoolean("mysql", false)) {
 			setupMySQL();
-		}else{
+		} else {
 			setupH2();
 		}
 
@@ -92,15 +92,15 @@ public final class AdminBans extends JavaPlugin {
 	public void onDisable() {
 		info("&4Disabling");
 
-		if(conn != null){
+		if (conn != null) {
 			try {
 				conn.close();
-			} catch (SQLException ignored) { }
+			} catch (SQLException ignored) {
+			}
 		}
 	}
 
-
-	private void setupMySQL(){
+	private void setupMySQL() {
 		try {
 			hikari = new HikariDataSource();
 			hikari.setMaximumPoolSize(10);
@@ -124,11 +124,10 @@ public final class AdminBans extends JavaPlugin {
 		}
 	}
 
-	private void setupH2(){
+	private void setupH2() {
 		try {
 			Class.forName("org.h2.Driver");
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			Bukkit.getConsoleSender().sendMessage(e.getMessage());
 		}
 		try {
@@ -154,37 +153,41 @@ public final class AdminBans extends JavaPlugin {
 		}
 	}
 
-	private void mkdir(){
+	private void mkdir() {
 
-		if(!this.co.exists()){
+		if (!this.co.exists()) {
 			saveResource("config.yml", false);
 		}
 
-		if(!this.me.exists()){
+		if (!this.me.exists()) {
 			saveResource("Messages.yml", false);
 		}
 
 	}
 
-	public void loadYamls(){
-		try{
+	public void loadYamls() {
+		try {
 			this.conf.load(this.co);
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 
-		try{
+		try {
 			this.mess.load(this.me);
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public YamlConfiguration getConf() { return this.conf; }
+	public YamlConfiguration getConf() {
+		return this.conf;
+	}
 
-	public YamlConfiguration getMess() { return this.mess; }
+	public YamlConfiguration getMess() {
+		return this.mess;
+	}
 
-	private void info(String message){
+	private void info(String message) {
 		Bukkit.getConsoleSender().sendMessage(Message.chat(""));
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====[" + message + " &cAdminBans&6]=====[]"));
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
@@ -192,11 +195,11 @@ public final class AdminBans extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|"));
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Name: &bAdminBans"));
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Developer: &bBlack1_TV"));
-		if(!username.contains("%%__")){
+		if (!username.contains("%%__")) {
 			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + username));
-		}else if(!user_id.contains("%%__")){
+		} else if (!user_id.contains("%%__")) {
 			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &b" + user_id));
-		}else{
+		} else {
 			Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Plugin owner: &4&lCRACKED"));
 		}
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6|   &9Version: &b" + getDescription().getVersion()));
@@ -210,7 +213,5 @@ public final class AdminBans extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(Message.chat("&6[]=====================================[]"));
 		Bukkit.getConsoleSender().sendMessage(Message.chat(""));
 	}
-
-	public static AdminBans getInstance(){ return instance; }
 
 }

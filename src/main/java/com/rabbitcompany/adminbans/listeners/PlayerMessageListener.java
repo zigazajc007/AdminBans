@@ -12,18 +12,18 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerMessageListener implements Listener {
 
-	private AdminBans adminBans;
+	private final AdminBans adminBans;
 
-	public PlayerMessageListener(AdminBans plugin){
+	public PlayerMessageListener(AdminBans plugin) {
 		adminBans = plugin;
 
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerChat(AsyncPlayerChatEvent event){
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player p = event.getPlayer();
-		if(AdminBansAPI.isPlayerMuted(p.getUniqueId(), AdminBansAPI.server_name)){
+		if (AdminBansAPI.isPlayerMuted(p.getUniqueId(), AdminBansAPI.server_name)) {
 			p.sendMessage(Message.getMessage(p.getUniqueId(), "mute_message"));
 			event.setCancelled(true);
 		}

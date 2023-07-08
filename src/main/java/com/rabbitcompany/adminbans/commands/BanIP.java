@@ -14,20 +14,20 @@ public class BanIP implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("banip")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("banip")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
-			if(args.length == 1){
+		if (!(sender instanceof Player)) {
+			if (args.length == 1) {
 				String ip = args[0];
-				if(AdminBansAPI.isIPValid(ip)){
+				if (AdminBansAPI.isIPValid(ip)) {
 					sender.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-				}else{
+				} else {
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
 				}
-			}else{
+			} else {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banip_syntax"));
 			}
 			return true;
@@ -35,18 +35,18 @@ public class BanIP implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.banip")){
-			if(args.length == 1){
+		if (player.hasPermission("adminbans.banip")) {
+			if (args.length == 1) {
 				String ip = args[0];
-				if(AdminBansAPI.isIPValid(ip)){
+				if (AdminBansAPI.isIPValid(ip)) {
 					player.sendMessage(AdminBansAPI.banIP(ip, AdminBansAPI.server_name));
-				}else{
+				} else {
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
 				}
-			}else{
+			} else {
 				player.sendMessage(Message.getMessage(player.getUniqueId(), "banip_syntax"));
 			}
-		}else{
+		} else {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 

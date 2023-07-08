@@ -3,14 +3,14 @@ version: ${project.version}
 main: com.rabbitcompany.adminbans.AdminBans
 api-version: 1.13
 load: STARTUP
-authors: [Black1_TV]
+authors: [ Black1_TV ]
 description: Manage bans, warns, kicks and mutes.
 website: https://rabbit-company.com
-softdepend: [PlaceholderAPI]
+softdepend: [ PlaceholderAPI ]
 commands:
   adminbans:
     usage: /<command>
-    aliases: [abans, ab]
+    aliases: [ abans, ab ]
     description: Show settings
   ban:
     usage: /<command>

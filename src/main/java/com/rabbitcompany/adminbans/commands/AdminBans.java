@@ -17,10 +17,10 @@ public class AdminBans implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(!(sender instanceof Player)) {
+		if (!(sender instanceof Player)) {
 
-			if(args.length == 1){
-				switch (args[0]){
+			if (args.length == 1) {
+				switch (args[0]) {
 					case "help":
 						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "commands"));
 						break;
@@ -35,32 +35,29 @@ public class AdminBans implements CommandExecutor {
 						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
 						break;
 				}
-			}else if(args.length == 2 && args[0].equals("import")){
-				switch (args[1]){
-					case "bukkit":
-						sender.sendMessage(Message.chat("&aImporting Bukkit bans..."));
-						sender.sendMessage(Message.chat("&aBanned accounts:"));
-						for (BanEntry banned : Bukkit.getBanList(BanList.Type.NAME).getBanEntries()) {
-							if(banned.getExpiration() != null){
-								AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(banned.getTarget()).getUniqueId().toString(), banned.getTarget(), banned.getReason(), AdminBansAPI.date_format.format(banned.getExpiration()));
-							}else{
-								Date until = new Date(System.currentTimeMillis() + 315569520000L);
-								AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(banned.getTarget()).getUniqueId().toString(), banned.getTarget(), banned.getReason(), AdminBansAPI.date_format.format(until));
-							}
-							sender.sendMessage(Message.chat("&a     - " + banned.getTarget()));
+			} else if (args.length == 2 && args[0].equals("import")) {
+				if (args[1].equals("bukkit")) {
+					sender.sendMessage(Message.chat("&aImporting Bukkit bans..."));
+					sender.sendMessage(Message.chat("&aBanned accounts:"));
+					for (BanEntry banned : Bukkit.getBanList(BanList.Type.NAME).getBanEntries()) {
+						if (banned.getExpiration() != null) {
+							AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(banned.getTarget()).getUniqueId().toString(), banned.getTarget(), banned.getReason(), AdminBansAPI.date_format.format(banned.getExpiration()));
+						} else {
+							Date until = new Date(System.currentTimeMillis() + 315569520000L);
+							AdminBansAPI.banPlayer("Console", "Console", Bukkit.getOfflinePlayer(banned.getTarget()).getUniqueId().toString(), banned.getTarget(), banned.getReason(), AdminBansAPI.date_format.format(until));
 						}
-						sender.sendMessage(Message.chat("&aBanned IPs:"));
-						for (BanEntry banned : Bukkit.getBanList(BanList.Type.IP).getBanEntries()){
-							AdminBansAPI.banIP(banned.getTarget());
-							sender.sendMessage(Message.chat("&a     - " + banned.getTarget()));
-						}
-						sender.sendMessage(Message.chat("&aImporting completed!"));
-						break;
-					default:
-						sender.sendMessage(Message.chat("&cAdminBans don't support &a" + args[1] + "&c ban plugin."));
-						break;
+						sender.sendMessage(Message.chat("&a     - " + banned.getTarget()));
+					}
+					sender.sendMessage(Message.chat("&aBanned IPs:"));
+					for (BanEntry banned : Bukkit.getBanList(BanList.Type.IP).getBanEntries()) {
+						AdminBansAPI.banIP(banned.getTarget());
+						sender.sendMessage(Message.chat("&a     - " + banned.getTarget()));
+					}
+					sender.sendMessage(Message.chat("&aImporting completed!"));
+				} else {
+					sender.sendMessage(Message.chat("&cAdminBans don't support &a" + args[1] + "&c ban plugin."));
 				}
-			}else{
+			} else {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "adminbans_syntax"));
 			}
 
@@ -69,29 +66,29 @@ public class AdminBans implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans")){
-			if(args.length == 1){
-				switch (args[0]){
+		if (player.hasPermission("adminbans")) {
+			if (args.length == 1) {
+				switch (args[0]) {
 					case "help":
 						player.sendMessage(Message.getMessage(player.getUniqueId(), "commands"));
 						break;
 					case "reload":
-						if(player.hasPermission("adminbans.reload")){
+						if (player.hasPermission("adminbans.reload")) {
 							com.rabbitcompany.adminbans.AdminBans.getInstance().loadYamls();
 							player.sendMessage(Message.getMessage(player.getUniqueId(), "reload"));
-						}else{
-							player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+						} else {
+							player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 						}
 						break;
 					default:
 						player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
 						break;
 				}
-			}else{
+			} else {
 				player.sendMessage(Message.getMessage(player.getUniqueId(), "adminbans_syntax"));
 			}
-		}else{
-			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		} else {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 
 		return true;

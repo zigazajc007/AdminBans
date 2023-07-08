@@ -17,12 +17,12 @@ public class BanList implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("banlist")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("banlist")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
+		if (!(sender instanceof Player)) {
 			ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "banned_players"));
 			for (BannedPlayer bannedPlayer : bannedPlayers) {
@@ -33,14 +33,14 @@ public class BanList implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.banlist")){
+		if (player.hasPermission("adminbans.banlist")) {
 			ArrayList<BannedPlayer> bannedPlayers = AdminBansAPI.getBannedPlayers();
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "banned_players"));
 			for (BannedPlayer bannedPlayer : bannedPlayers) {
 				player.sendMessage(Message.chat("&a- &c" + bannedPlayer.username_to));
 			}
-		}else{
-			player.sendMessage(Message.getMessage(player.getUniqueId(),"permission"));
+		} else {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 
 		return true;

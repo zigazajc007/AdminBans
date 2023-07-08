@@ -15,24 +15,24 @@ public class UnbanIP implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if(AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unbanip")){
+		if (AdminBans.getInstance().getConf().getStringList("disabled_commands").contains("unbanip")) {
 			sender.sendMessage(Message.getMessage(UUID.randomUUID(), "disabled_command"));
 			return true;
 		}
 
-		if(!(sender instanceof Player)) {
-			if(args.length == 1){
+		if (!(sender instanceof Player)) {
+			if (args.length == 1) {
 				String ip = args[0];
-				if(AdminBansAPI.isIPValid(ip)){
-					if(AdminBansAPI.unBanIP(ip)){
+				if (AdminBansAPI.isIPValid(ip)) {
+					if (AdminBansAPI.unBanIP(ip)) {
 						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "ip_unban").replace("{ip}", ip));
-					}else{
+					} else {
 						sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unban_ip_error").replace("{ip}", ip));
 					}
-				}else{
+				} else {
 					sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_ip").replace("{ip}", ip));
 				}
-			}else{
+			} else {
 				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "unbanip_syntax"));
 			}
 			return true;
@@ -40,22 +40,22 @@ public class UnbanIP implements CommandExecutor {
 
 		Player player = (Player) sender;
 
-		if(player.hasPermission("adminbans.unbanip")){
-			if(args.length == 1){
+		if (player.hasPermission("adminbans.unbanip")) {
+			if (args.length == 1) {
 				String ip = args[0];
-				if(AdminBansAPI.isIPValid(ip)){
-					if(AdminBansAPI.unBanIP(ip)){
+				if (AdminBansAPI.isIPValid(ip)) {
+					if (AdminBansAPI.unBanIP(ip)) {
 						player.sendMessage(Message.getMessage(player.getUniqueId(), "ip_unban").replace("{ip}", ip));
-					}else{
+					} else {
 						player.sendMessage(Message.getMessage(player.getUniqueId(), "unban_ip_error").replace("{ip}", ip));
 					}
-				}else{
+				} else {
 					player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_ip").replace("{ip}", ip));
 				}
-			}else{
+			} else {
 				player.sendMessage(Message.getMessage(player.getUniqueId(), "unbanip_syntax"));
 			}
-		}else{
+		} else {
 			player.sendMessage(Message.getMessage(player.getUniqueId(), "permission"));
 		}
 
