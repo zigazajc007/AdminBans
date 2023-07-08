@@ -3,6 +3,7 @@
 </div>
 
 <h3>Video:</h3>
+
 [![AdminBans video](http://img.youtube.com/vi/XNbzvaI9DIQ/0.jpg)](http://www.youtube.com/watch?v=XNbzvaI9DIQ "AdminBans Video")
 
 <h3>Commands:</h3>
