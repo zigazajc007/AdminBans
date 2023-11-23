@@ -110,16 +110,12 @@ public class AdminBansAPI {
 			conn.close();
 			Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
 			Player target_name = Bukkit.getPlayer(username_to);
-			if (target_uuid != null) {
-				if (target_uuid.isOnline()) {
-					target_uuid.kickPlayer(Utils.banReasonMessage(target_uuid.getUniqueId(), reason, until));
-				}
-			} else if (target_name != null) {
-				if (target_name.isOnline()) {
-					target_name.kickPlayer(Utils.banReasonMessage(target_name.getUniqueId(), reason, until));
-				}
+			if (target_uuid != null && target_uuid.isOnline()) {
+				target_uuid.kickPlayer(Utils.banReasonMessage(target_uuid.getUniqueId(), reason, until));
+			} else if (target_name != null && target_name.isOnline()) {
+				target_name.kickPlayer(Utils.banReasonMessage(target_name.getUniqueId(), reason, until));
 			}
-			if (reason == null || reason.length() == 0) {
+			if (reason == null || reason.isEmpty()) {
 				return Message.getMessage(UUID.randomUUID(), "player_ban_no_reason").replace("{player}", username_to);
 			} else {
 				return Message.getMessage(UUID.randomUUID(), "player_ban").replace("{player}", username_to).replace("{reason}", Message.chat(reason));
@@ -139,11 +135,9 @@ public class AdminBansAPI {
 			ps.close();
 			conn.close();
 			for (Player target : Bukkit.getOnlinePlayers()) {
-				if (target != null) {
-					if (target.isOnline()) {
-						if (target.getAddress().getHostName().equals(ip)) {
-							target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
-						}
+				if (target != null && target.isOnline()) {
+					if (target.getAddress().getHostName().equals(ip)) {
+						target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
 					}
 				}
 			}
@@ -165,11 +159,9 @@ public class AdminBansAPI {
 			conn.close();
 			if (server_name.equals(server)) {
 				for (Player target : Bukkit.getOnlinePlayers()) {
-					if (target != null) {
-						if (target.isOnline()) {
-							if (target.getAddress().getHostName().equals(ip)) {
-								target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
-							}
+					if (target != null && target.isOnline()) {
+						if (target.getAddress().getHostName().equals(ip)) {
+							target.kickPlayer(Message.getMessage(target.getUniqueId(), "ip_ban_message"));
 						}
 					}
 				}
@@ -219,14 +211,10 @@ public class AdminBansAPI {
 			conn.close();
 			Player target_uuid = Bukkit.getPlayer(UUID.fromString(uuid_to));
 			Player target_name = Bukkit.getPlayer(username_to);
-			if (target_uuid != null) {
-				if (target_uuid.isOnline()) {
-					target_uuid.kickPlayer(Message.chat(Message.getMessage(target_uuid.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_uuid.getUniqueId(), "prefix"))));
-				}
-			} else if (target_name != null) {
-				if (target_name.isOnline()) {
-					target_name.kickPlayer(Message.chat(Message.getMessage(target_name.getUniqueId(), "prefix") + Message.getMessage(target_name.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_name.getUniqueId(), "prefix"))));
-				}
+			if (target_uuid != null && target_uuid.isOnline()) {
+				target_uuid.kickPlayer(Message.chat(Message.getMessage(target_uuid.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_uuid.getUniqueId(), "prefix"))));
+			} else if (target_name != null && target_name.isOnline()) {
+				target_name.kickPlayer(Message.chat(Message.getMessage(target_name.getUniqueId(), "prefix") + Message.getMessage(target_name.getUniqueId(), "kick_message").replace("{reason}", reason).replace("{prefix}", Message.getMessage(target_name.getUniqueId(), "prefix"))));
 			}
 			return Message.getMessage(UUID.randomUUID(), "player_kick").replace("{player}", username_to).replace("{reason}", Message.chat(reason));
 		} catch (SQLException ignored) {
@@ -304,8 +292,7 @@ public class AdminBansAPI {
 				ps.close();
 				conn.close();
 				return true;
-			} catch (SQLException ignored) {
-			}
+			} catch (SQLException ignored) {}
 		}
 		return false;
 	}
@@ -322,8 +309,7 @@ public class AdminBansAPI {
 				ps.close();
 				conn.close();
 				return true;
-			} catch (SQLException ignored) {
-			}
+			} catch (SQLException ignored) {}
 		}
 		return false;
 	}
@@ -341,8 +327,7 @@ public class AdminBansAPI {
 				ps.close();
 				conn.close();
 				return true;
-			} catch (SQLException ignored) {
-			}
+			} catch (SQLException ignored) {}
 		}
 		return false;
 	}
@@ -360,8 +345,7 @@ public class AdminBansAPI {
 				ps.close();
 				conn.close();
 				return true;
-			} catch (SQLException ignored) {
-			}
+			} catch (SQLException ignored) {}
 		}
 		return false;
 	}
@@ -381,9 +365,7 @@ public class AdminBansAPI {
 			rs.close();
 			ps.close();
 			conn.close();
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		}
+		} catch (SQLException ignored) {}
 
 		return getWarnCount.get();
 	}
@@ -404,9 +386,7 @@ public class AdminBansAPI {
 			rs.close();
 			ps.close();
 			conn.close();
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		}
+		} catch (SQLException ignored) {}
 
 		return getWarnCount.get();
 	}
@@ -426,9 +406,7 @@ public class AdminBansAPI {
 			rs.close();
 			ps.close();
 			conn.close();
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		}
+		} catch (SQLException ignored) {}
 
 		return getWarnCount.get();
 	}
@@ -449,9 +427,7 @@ public class AdminBansAPI {
 			rs.close();
 			ps.close();
 			conn.close();
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		}
+		} catch (SQLException ignored) {}
 
 		return getWarnCount.get();
 	}
@@ -522,9 +498,7 @@ public class AdminBansAPI {
 				rs.close();
 				ps.close();
 				conn.close();
-			} catch (SQLException throwables) {
-				throwables.printStackTrace();
-			}
+			} catch (SQLException ignored) {}
 
 			bannedPlayers = tempBannedPlayers;
 		}, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_banned_players", 15));
@@ -545,9 +519,7 @@ public class AdminBansAPI {
 				rs.close();
 				ps.close();
 				conn.close();
-			} catch (SQLException throwables) {
-				throwables.printStackTrace();
-			}
+			} catch (SQLException ignored) {}
 
 			bannedIPs = tempBannedIPs;
 		}, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_banned_ips", 15));
@@ -572,9 +544,7 @@ public class AdminBansAPI {
 				rs.close();
 				ps.close();
 				conn.close();
-			} catch (SQLException throwables) {
-				throwables.printStackTrace();
-			}
+			} catch (SQLException ignored) {}
 
 			mutedPlayers = tempMutedPlayers;
 		}, 0L, 20L * AdminBans.getInstance().getConf().getInt("fetch_muted_players", 15));

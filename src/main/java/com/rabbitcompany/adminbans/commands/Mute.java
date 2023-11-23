@@ -4,7 +4,7 @@ import com.rabbitcompany.adminbans.AdminBans;
 import com.rabbitcompany.adminbans.AdminBansAPI;
 import com.rabbitcompany.adminbans.utils.Message;
 import com.rabbitcompany.adminbans.utils.Utils;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

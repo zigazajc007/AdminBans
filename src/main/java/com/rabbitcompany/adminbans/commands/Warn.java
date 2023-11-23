@@ -28,23 +28,24 @@ public class Warn implements CommandExecutor {
 				return true;
 			}
 
-			Player target = Bukkit.getPlayer(args[0]);
-			if (target == null) {
-				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_a_player").replace("{player}", args[0]));
-				return true;
-			}
-
-			if (!target.isOnline()) {
-				sender.sendMessage(Message.getMessage(UUID.randomUUID(), "is_not_online").replace("{player}", target.getName()));
-				return true;
-			}
-
+			boolean silence = false;
 			StringBuilder message = new StringBuilder();
 			for (int i = 1; i < args.length; i++) {
-				message.append(args[i]).append(" ");
+				if (!args[i].equals("-s")) {
+					message.append(args[i]).append(" ");
+				}else{
+					silence = true;
+				}
 			}
 
-			Bukkit.broadcastMessage(AdminBansAPI.warnPlayer("Console", "Console", target.getUniqueId().toString(), target.getName(), message.toString()));
+			String str_player = args[0];
+
+			if(silence){
+				sender.sendMessage(AdminBansAPI.warnPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, message.toString()));
+				return true;
+			}
+
+			Bukkit.broadcastMessage(AdminBansAPI.warnPlayer("Console", "Console", Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, message.toString()));
 			return true;
 		}
 
@@ -60,28 +61,30 @@ public class Warn implements CommandExecutor {
 			return true;
 		}
 
-		Player target = Bukkit.getPlayer(args[0]);
-		if (target == null) {
-			player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_a_player").replace("{player}", args[0]));
+		String str_player = args[0];
+
+		Player target = Bukkit.getPlayer(str_player);
+		if (target != null && target.hasPermission("adminbans.warn.exempt")) {
+			player.sendMessage(Message.getMessage(player.getUniqueId(), "player_warn_exempt").replace("{player}", str_player));
 			return true;
 		}
-
-		if (target.hasPermission("adminbans.warn.exempt")) {
-			player.sendMessage(Message.getMessage(player.getUniqueId(), "player_warn_exempt").replace("{player}", target.getName()));
-			return true;
-		}
-
-		if (!target.isOnline()) {
-			player.sendMessage(Message.getMessage(player.getUniqueId(), "is_not_online").replace("{player}", target.getName()));
-			return true;
-		}
-
+		
+		boolean silence = false;
 		StringBuilder message = new StringBuilder();
 		for (int i = 1; i < args.length; i++) {
-			message.append(args[i]).append(" ");
+			if (!args[i].equals("-s")) {
+				message.append(args[i]).append(" ");
+			}else{
+				silence = true;
+			}
 		}
 
-		Bukkit.broadcastMessage(AdminBansAPI.warnPlayer(player.getUniqueId().toString(), player.getName(), target.getUniqueId().toString(), target.getName(), message.toString()));
+		if(silence){
+			player.sendMessage(AdminBansAPI.warnPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, message.toString()));
+			return true;
+		}
+
+		Bukkit.broadcastMessage(AdminBansAPI.warnPlayer(player.getUniqueId().toString(), player.getName(), Bukkit.getOfflinePlayer(str_player).getUniqueId().toString(), str_player, message.toString()));
 		return true;
 	}
 }

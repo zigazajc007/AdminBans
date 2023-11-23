@@ -1,30 +1,26 @@
 package com.rabbitcompany.adminbans.utils;
 
 import com.rabbitcompany.adminbans.AdminBansAPI;
-
 import java.util.UUID;
 
 public class Utils {
 
 	public static String banReasonMessage(UUID target, String reason, String time) {
-		String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
 		if (time.equals("9999-12-31 23:59:59")) {
 			if (reason == null || reason.equals("null")) {
-				return bumper + Message.getMessage(target, "ban_message_perm_no_reason") + bumper;
+				return Message.getMessage(target, "ban_message_perm_no_reason");
 			} else {
-				return bumper + Message.getMessage(target, "ban_message_perm").replace("{reason}", reason) + bumper;
+				return Message.getMessage(target, "ban_message_perm").replace("{reason}", reason);
 			}
 		} else if (reason == null || reason.equals("null")) {
-			return bumper + Message.getMessage(target, "ban_message_no_reason").replace("{time}", time) + bumper;
+			return Message.getMessage(target, "ban_message_no_reason").replace("{time}", time);
 		} else {
-			return bumper + Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time) + bumper;
+			return Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time);
 		}
 	}
 
 	public static String banIPMessage() {
-		String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
-
-		return bumper + Message.getMessage(UUID.randomUUID(), "ip_ban_message") + bumper;
+		return Message.getMessage(UUID.randomUUID(), "ip_ban_message");
 	}
 
 	public static String playerBannedMessage(UUID uuid) {
