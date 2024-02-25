@@ -15,6 +15,7 @@ public class AdminBansAPI {
 
 	public static String server_name = AdminBans.getInstance().getConf().getString("server_name");
 	public static SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static SimpleDateFormat user_date_format = new SimpleDateFormat(AdminBans.getInstance().getConf().getString("time_format", "yyyy-MM-dd HH:mm:ss"));
 
 	private static ArrayList<BannedPlayer> bannedPlayers = new ArrayList<>();
 	private static ArrayList<BannedIP> bannedIPs = new ArrayList<>();

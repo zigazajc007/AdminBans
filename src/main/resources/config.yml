@@ -71,6 +71,11 @@ times:
   - "3y"
   - "10y"
 #----------------------------------------------------------
+#                     Time Format
+# https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+#----------------------------------------------------------
+time_format: "yyyy-MM-dd HH:mm:ss"
+#----------------------------------------------------------
 #             Commands restriction when muted
 #----------------------------------------------------------
 mute_commands_restriction:

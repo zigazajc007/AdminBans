@@ -1,11 +1,19 @@
 package com.rabbitcompany.adminbans.utils;
 
 import com.rabbitcompany.adminbans.AdminBansAPI;
+
+import java.text.ParseException;
 import java.util.UUID;
 
 public class Utils {
 
 	public static String banReasonMessage(UUID target, String reason, String time) {
+		String formattedTime = time;
+
+		try {
+			formattedTime = AdminBansAPI.user_date_format.format(AdminBansAPI.date_format.parse(time));
+		} catch (ParseException ignored) {}
+
 		if (time.equals("9999-12-31 23:59:59")) {
 			if (reason == null || reason.equals("null")) {
 				return Message.getMessage(target, "ban_message_perm_no_reason");
@@ -13,9 +21,9 @@ public class Utils {
 				return Message.getMessage(target, "ban_message_perm").replace("{reason}", reason);
 			}
 		} else if (reason == null || reason.equals("null")) {
-			return Message.getMessage(target, "ban_message_no_reason").replace("{time}", time);
+			return Message.getMessage(target, "ban_message_no_reason").replace("{time}", formattedTime);
 		} else {
-			return Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", time);
+			return Message.getMessage(target, "ban_message").replace("{reason}", reason).replace("{time}", formattedTime);
 		}
 	}
 
